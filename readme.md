@@ -44,3 +44,11 @@
 - Cloudflare Pages 已连接 lubenheng/customer，网站上线：https://customer-14k.pages.dev
 - 推送到 main 自动构建部署；线上检查 10 个公开页面均正常，内部文档均为 404
 - readme.md、操作指南.md 记录实际网站地址
+
+### 2026-11-10 19:59
+- 下载列表自动化：网页自动列出 public/downloads/ 下对应文件夹中的文件（文件名、大小、下载按钮），无需改页面
+  - .vitepress/theme/downloads.data.mjs：构建时扫描文件夹
+  - .vitepress/theme/DownloadList.vue：下载列表组件，页面中写 `<DownloadList dir="文件夹" />`
+- 新建文件夹：code/ 对应代码下载页；series-1~3/ 下 7 个子文件夹对应各系列设计资源分组
+- code/index.md 与 3 个系列页改用自动列表，空文件夹显示「暂无资料」
+- 操作指南.md 第五节新增文件夹与网页位置对应表

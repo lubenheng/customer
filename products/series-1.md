@@ -26,29 +26,29 @@ outline: false
 ## 设计资源
 
 ::: details Datasheet
-暂无资料。
+<DownloadList dir="series-1/datasheet" />
 :::
 
 ::: details User Manual
-暂无资料。
+<DownloadList dir="series-1/user-manual" />
 :::
 
 ::: details Device Pack
-暂无资料。
+<DownloadList dir="series-1/device-pack" />
 :::
 
 ::: details Demo Board
-暂无资料。
+<DownloadList dir="series-1/demo-board" />
 :::
 
 ::: details Software Reference
-暂无资料。
+<DownloadList dir="series-1/software-reference" />
 :::
 
 ::: details Tools & Software
-暂无资料。
+<DownloadList dir="series-1/tools-software" />
 :::
 
 ::: details Application Note
-暂无资料。
+<DownloadList dir="series-1/application-note" />
 :::
