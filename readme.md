@@ -16,3 +16,7 @@
 - 新增页面：首页、快速开始、用户手册、应用笔记、代码下载、更新日志
 - 新增 DEPLOY.md（Cloudflare Pages 部署说明）、R2-SETUP.md（R2 集成说明）
 - 本地构建验证通过
+
+### 2026-11-10 16:59
+- 目标仓库由 lubenheng/test（已有无关项目）改为空仓库 lubenheng/customer
+- DEPLOY.md 中的仓库名同步更新

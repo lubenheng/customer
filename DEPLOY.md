@@ -2,7 +2,7 @@
 
 ## 1. 前提
 
-- 本项目（`docs-site` 目录内容）作为仓库根目录推送到 `https://github.com/lubenheng/test`。
+- 本项目（`docs-site` 目录内容）作为仓库根目录推送到 `https://github.com/lubenheng/customer`。
 - 仓库根目录包含 `package.json`，Cloudflare Pages 构建时会自动执行 `npm install` 安装 VitePress。
 
 ## 2. 创建 Pages 项目（控制台操作顺序）
@@ -12,7 +12,7 @@
 3. 点击右上角 **Create application**
 4. 切换到 **Pages** 标签页
 5. 点击 **Import an existing Git repository**（连接到 Git）
-6. 首次使用会要求连接 GitHub 账号 → 授权后在仓库列表选择 **lubenheng/test**
+6. 首次使用会要求连接 GitHub 账号 → 授权后在仓库列表选择 **lubenheng/customer**
 7. 点击 **Begin setup**，填写下方构建配置
 8. 点击 **Save and Deploy**，等待首次构建完成，获得 `https://<项目名>.pages.dev` 地址
 
@@ -38,12 +38,12 @@
 
 ## 5. 私有仓库授权
 
-如果 `lubenheng/test` 是私有仓库，需要确保 Cloudflare 的 GitHub App 有权访问：
+如果 `lubenheng/customer` 是私有仓库，需要确保 Cloudflare 的 GitHub App 有权访问：
 
 1. 打开 GitHub → 右上角头像 → **Settings**
 2. 左侧 **Integrations → Applications** → **Installed GitHub Apps**
 3. 找到 **Cloudflare Workers and Pages**，点击 **Configure**（未安装时在第 2 节第 6 步授权流程中会引导安装）
-4. 在 **Repository access** 中选择 **All repositories**，或 **Only select repositories** 并勾选 `lubenheng/test`
+4. 在 **Repository access** 中选择 **All repositories**，或 **Only select repositories** 并勾选 `lubenheng/customer`
 5. 点击 **Save**，回到 Cloudflare 刷新仓库列表
 
 ## 6. 已知限制（如实说明）
