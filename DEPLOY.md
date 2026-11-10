@@ -20,7 +20,7 @@
 
 | 配置项 | 值 |
 | --- | --- |
-| Project name | 自定义，例如 `test`（决定 `*.pages.dev` 子域名） |
+| Project name | 自定义，例如 `customer`（决定 `*.pages.dev` 子域名） |
 | Production branch | `main`（或仓库实际分支名） |
 | Framework preset | `None`（或 `VitePress`，两者均可，以下面的值为准） |
 | Build command | `npx vitepress build` |

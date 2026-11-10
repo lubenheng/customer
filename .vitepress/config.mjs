@@ -14,7 +14,7 @@ export default defineConfig({
   base: '/',
   cleanUrls: true,
   // 内部说明文档只保留在仓库中，不发布为网页
-  srcExclude: ['DEPLOY.md', 'R2-SETUP.md', 'readme.md', 'README.md', '操作指南.md'],
+  srcExclude: ['DEPLOY.md', 'readme.md', 'README.md', '操作指南.md'],
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },

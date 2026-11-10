@@ -1,12 +1,11 @@
 # 上海灿瑞科技股份有限公司 文档站点
 
-基于 VitePress 的文档站点，通过 Cloudflare Pages 部署，大文件存放于 Cloudflare R2。
+基于 VitePress 的文档站点，通过 Cloudflare Pages 部署，下载文件放在 public/downloads/ 随站点一起发布。
 
 - 本地预览：`npm install && npm run docs:dev`
 - 构建：`npx vitepress build`（输出 `.vitepress/dist`）
 - 操作指南：见 操作指南.md
 - 部署说明：见 DEPLOY.md
-- R2 集成：见 R2-SETUP.md
 
 创作者：pjh-AI
 
@@ -33,3 +32,9 @@
 - 新增「产品中心」（/products/）及 3 个产品系列占位页（series-1/2/3），布局参考 lksmcu.com LKS03 系列页：横幅、面包屑、操作按钮、产品选型表、7 类设计资源折叠
 - 顶部导航新增「产品中心」，产品页侧边栏列出各系列
 - custom.css 新增第 9 段产品系列页样式
+
+### 2026-11-10 19:29
+- 不再使用 Cloudflare R2：删除 R2-SETUP.md，下载文件改放 public/downloads/（单文件上限 25 MB）
+- code/index.md 下载链接改为 /downloads/xxx，删除「请替换」提示
+- 操作指南.md 第五节改为「下载文件管理」，同步更新速查与排障表
+- DEPLOY.md 中项目名示例由 test 改为 customer
