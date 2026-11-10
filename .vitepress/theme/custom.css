@@ -218,3 +218,51 @@
     font-size: 16px;
   }
 }
+
+/* ---------- 9. 产品系列页（参考 lksmcu 产品页：横幅 + 面包屑 + 按钮 + 选型表 + 资料折叠） ---------- */
+.series-banner {
+  padding: 40px 32px;
+  border-radius: 4px;
+  color: #ffffff;
+  background:
+    linear-gradient(90deg, rgba(15, 34, 53, 0.9) 0%, rgba(15, 34, 53, 0.6) 100%),
+    url('/hero-bg.jpg') center / cover no-repeat;
+}
+.vp-doc .series-banner h1 {
+  margin: 0;
+  padding: 0;
+  border: none;
+  color: #ffffff;
+}
+.vp-doc .series-banner p {
+  margin: 12px 0 0;
+  color: rgba(255, 255, 255, 0.85);
+}
+.breadcrumb {
+  margin: 16px 0;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+.series-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+.vp-doc a.series-btn {
+  padding: 6px 20px;
+  border: 1px solid var(--brand-navy);
+  border-radius: 4px;
+  color: var(--brand-navy);
+  text-decoration: none;
+  transition: background 0.2s, color 0.2s;
+}
+.vp-doc a.series-btn:hover,
+.vp-doc a.series-btn.primary {
+  background: var(--brand-navy);
+  color: #ffffff;
+}
+.vp-doc .details {
+  border-left: 4px solid var(--brand-navy);
+  background: var(--vp-c-bg-alt);
+}

@@ -28,3 +28,8 @@
 - 站点名称改为「上海灿瑞科技股份有限公司」
 - 首页横幅背景使用 orient-chip.com 官网图片（public/hero-bg.jpg）
 - 内部说明文档（DEPLOY.md、R2-SETUP.md、readme.md、操作指南.md）通过 srcExclude 排除，不再发布为网页
+
+### 2026-11-10 18:05
+- 新增「产品中心」（/products/）及 3 个产品系列占位页（series-1/2/3），布局参考 lksmcu.com LKS03 系列页：横幅、面包屑、操作按钮、产品选型表、7 类设计资源折叠
+- 顶部导航新增「产品中心」，产品页侧边栏列出各系列
+- custom.css 新增第 9 段产品系列页样式

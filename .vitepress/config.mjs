@@ -18,11 +18,23 @@ export default defineConfig({
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
+      { text: '产品中心', link: '/products/' },
       { text: '文档中心', link: '/docs/getting-started' },
       { text: '代码下载', link: '/code/' },
       { text: '更新日志', link: '/changelog/' }
     ],
     sidebar: {
+      '/products/': [
+        {
+          text: '产品中心',
+          link: '/products/',
+          items: [
+            { text: '产品系列一', link: '/products/series-1' },
+            { text: '产品系列二', link: '/products/series-2' },
+            { text: '产品系列三', link: '/products/series-3' }
+          ]
+        }
+      ],
       '/docs/': [
         { text: '快速开始', items: [{ text: '快速开始', link: '/docs/getting-started' }] },
         { text: '用户手册', items: [{ text: '用户手册', link: '/docs/manual' }] },
