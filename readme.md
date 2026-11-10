@@ -2,6 +2,7 @@
 
 基于 VitePress 的文档站点，通过 Cloudflare Pages 部署，下载文件放在 public/downloads/ 随站点一起发布。
 
+- 网站地址：https://customer-14k.pages.dev（推送到 main 后自动更新）
 - 本地预览：`npm install && npm run docs:dev`
 - 构建：`npx vitepress build`（输出 `.vitepress/dist`）
 - 操作指南：见 操作指南.md
@@ -38,3 +39,8 @@
 - code/index.md 下载链接改为 /downloads/xxx，删除「请替换」提示
 - 操作指南.md 第五节改为「下载文件管理」，同步更新速查与排障表
 - DEPLOY.md 中项目名示例由 test 改为 customer
+
+### 2026-11-10 19:46
+- Cloudflare Pages 已连接 lubenheng/customer，网站上线：https://customer-14k.pages.dev
+- 推送到 main 自动构建部署；线上检查 10 个公开页面均正常，内部文档均为 404
+- readme.md、操作指南.md 记录实际网站地址
