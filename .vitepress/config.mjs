@@ -9,10 +9,12 @@ import { defineConfig } from 'vitepress'
 //-------------------------------------------------------------------------------------------------------------------
 export default defineConfig({
   lang: 'zh-CN',
-  title: '我的技术文档中心',
+  title: '上海灿瑞科技股份有限公司',
   description: '产品文档、应用笔记与代码下载',
   base: '/',
   cleanUrls: true,
+  // 内部说明文档只保留在仓库中，不发布为网页
+  srcExclude: ['DEPLOY.md', 'R2-SETUP.md', 'readme.md', 'README.md', '操作指南.md'],
   themeConfig: {
     nav: [
       { text: '首页', link: '/' },
@@ -29,6 +31,7 @@ export default defineConfig({
     },
     search: { provider: 'local' },
     outline: { label: '本页目录' },
-    docFooter: { prev: '上一页', next: '下一页' }
+    docFooter: { prev: '上一页', next: '下一页' },
+    footer: { message: '产品文档、应用笔记与代码下载', copyright: 'Copyright © 2026 上海灿瑞科技股份有限公司' }
   }
 })

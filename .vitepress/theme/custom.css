@@ -1,0 +1,220 @@
+/* ==========================================================================
+   企业风格主题（参考 lksmcu.com）：深海军蓝主色、白底、浅灰分区、卡片悬浮
+   ========================================================================== */
+
+/* ---------- 1. 全局配色与字体 ---------- */
+:root {
+  --brand-navy: #17334e;
+  --brand-navy-light: #24507a;
+  --brand-navy-dark: #0f2235;
+
+  --vp-c-brand-1: #17334e;
+  --vp-c-brand-2: #24507a;
+  --vp-c-brand-3: #17334e;
+  --vp-c-brand-soft: rgba(23, 51, 78, 0.1);
+
+  --vp-c-bg-alt: #f5f5f5;
+  --vp-c-divider: #ededed;
+
+  --vp-font-family-base: 'Microsoft YaHei UI', 'Microsoft YaHei', 'PingFang SC', ui-sans-serif, system-ui,
+    -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+
+  --vp-button-brand-bg: #ffffff;
+  --vp-button-brand-text: #17334e;
+  --vp-button-brand-border: #ffffff;
+  --vp-button-brand-hover-bg: #ededed;
+  --vp-button-brand-hover-text: #17334e;
+  --vp-button-brand-hover-border: #ededed;
+  --vp-button-alt-bg: transparent;
+  --vp-button-alt-text: #ffffff;
+  --vp-button-alt-border: rgba(255, 255, 255, 0.7);
+  --vp-button-alt-hover-bg: rgba(255, 255, 255, 0.12);
+  --vp-button-alt-hover-text: #ffffff;
+  --vp-button-alt-hover-border: #ffffff;
+}
+
+.dark {
+  --vp-c-brand-1: #7fb2e5;
+  --vp-c-brand-2: #a3c8ee;
+  --vp-c-brand-3: #24507a;
+  --vp-c-brand-soft: rgba(127, 178, 229, 0.16);
+}
+
+/* ---------- 2. 顶部导航：深蓝底白字 ---------- */
+.VPNavBar,
+.VPNavBar.has-sidebar .content-body,
+.VPNavBar:not(.home) .content-body,
+.VPNavBar .divider-line {
+  background-color: var(--brand-navy) !important;
+}
+.VPNavBar .title,
+.VPNavBar .VPNavBarMenuLink,
+.VPNavBar .VPNavBarMenuGroup .text,
+.VPNavBar .VPNavBarExtra .icon,
+.VPNavBar .VPNavBarHamburger .top,
+.VPNavBar .VPNavBarHamburger .middle,
+.VPNavBar .VPNavBarHamburger .bottom {
+  color: #ffffff !important;
+}
+.VPNavBar .VPNavBarHamburger span {
+  background-color: #ffffff !important;
+}
+.VPNavBar .VPNavBarMenuLink {
+  position: relative;
+  font-size: 15px;
+}
+.VPNavBar .VPNavBarMenuLink:hover,
+.VPNavBar .VPNavBarMenuLink.active {
+  color: #ffffff !important;
+  opacity: 1;
+}
+.VPNavBar .VPNavBarMenuLink.active::after {
+  content: '';
+  position: absolute;
+  left: 12px;
+  right: 12px;
+  bottom: 10px;
+  height: 2px;
+  background: #ffffff;
+}
+.VPNavBar .DocSearch-Button {
+  background: rgba(255, 255, 255, 0.12);
+}
+.VPNavBar .DocSearch-Button .DocSearch-Search-Icon,
+.VPNavBar .DocSearch-Button-Placeholder {
+  color: rgba(255, 255, 255, 0.85);
+}
+.VPNavBar .VPSwitchAppearance {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+/* ---------- 3. 首页横幅：整幅深蓝渐变 ---------- */
+.VPHome {
+  padding-bottom: 0 !important;
+}
+.VPHero {
+  margin-top: calc(var(--vp-nav-height) * -1) !important;
+  padding: calc(var(--vp-nav-height) + 96px) 24px 104px !important;
+  background:
+    linear-gradient(90deg, rgba(15, 34, 53, 0.85) 0%, rgba(15, 34, 53, 0.55) 45%, rgba(15, 34, 53, 0.1) 100%),
+    url('/hero-bg.jpg') center / cover no-repeat,
+    var(--brand-navy-dark);
+}
+.VPHero .name,
+.VPHero .name .clip {
+  color: #ffffff !important;
+  -webkit-text-fill-color: #ffffff !important;
+  background: none !important;
+  font-size: 48px;
+  letter-spacing: 2px;
+}
+.VPHero .tagline {
+  color: rgba(255, 255, 255, 0.85) !important;
+  font-size: 20px;
+  padding-top: 16px;
+}
+.VPHero .actions {
+  padding-top: 40px;
+}
+.VPHero .VPButton {
+  border-radius: 4px !important;
+  padding: 0 32px !important;
+  font-size: 16px !important;
+  line-height: 46px !important;
+}
+
+/* ---------- 4. 首页功能卡片：浅灰底、白卡片、悬浮上移 ---------- */
+.VPFeatures {
+  padding: 72px 24px 96px !important;
+  background: var(--vp-c-bg-alt);
+}
+.VPFeatures .container::before {
+  content: '服务导航';
+  display: block;
+  margin-bottom: 40px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+.VPFeature {
+  background: var(--vp-c-bg) !important;
+  border: none !important;
+  border-top: 3px solid var(--brand-navy) !important;
+  border-radius: 4px !important;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.VPFeature:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(23, 51, 78, 0.18);
+}
+.VPFeature .title {
+  font-size: 20px !important;
+}
+.VPFeature .link-text-value {
+  color: var(--vp-c-brand-1) !important;
+}
+
+/* ---------- 5. 文档页：侧边栏与标题 ---------- */
+.VPSidebar {
+  background-color: #f6f6f6 !important;
+}
+.dark .VPSidebar {
+  background-color: var(--vp-c-bg-alt) !important;
+}
+.VPSidebarItem.level-0 > .item .text {
+  font-weight: 600;
+}
+.VPSidebarItem.is-active > .item .link > .text {
+  color: var(--vp-c-brand-1) !important;
+}
+.vp-doc h1 {
+  padding-bottom: 16px;
+  border-bottom: 2px solid var(--brand-navy);
+}
+.dark .vp-doc h1 {
+  border-bottom-color: var(--vp-c-brand-1);
+}
+.vp-doc h2 {
+  border-top: none;
+  padding-left: 12px;
+  border-left: 4px solid var(--vp-c-brand-1);
+}
+
+/* ---------- 6. 表格：深蓝表头（下载页列表） ---------- */
+.vp-doc table {
+  display: table;
+  width: 100%;
+}
+.vp-doc th {
+  background: var(--brand-navy) !important;
+  color: #ffffff !important;
+}
+.vp-doc tr:hover td {
+  background: var(--vp-c-brand-soft);
+}
+
+/* ---------- 7. 页脚：深色底 ---------- */
+.VPFooter {
+  background: var(--brand-navy-dark) !important;
+  border-top: none !important;
+}
+.VPFooter .message,
+.VPFooter .copyright {
+  color: rgba(255, 255, 255, 0.7) !important;
+}
+
+/* ---------- 8. 移动端 ---------- */
+@media (max-width: 768px) {
+  .VPHero {
+    padding: calc(var(--vp-nav-height) + 56px) 24px 64px !important;
+  }
+  .VPHero .name,
+  .VPHero .name .clip {
+    font-size: 34px;
+  }
+  .VPHero .tagline {
+    font-size: 16px;
+  }
+}

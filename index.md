@@ -2,7 +2,7 @@
 layout: home
 
 hero:
-  name: 技术文档中心
+  name: 上海灿瑞科技股份有限公司
   tagline: 为国内客户提供最新文档与代码
   actions:
     - theme: brand
