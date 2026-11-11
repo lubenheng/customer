@@ -17,6 +17,16 @@ onMounted(() => {
 })
 
 //-------------------------------------------------------------------------------------------------------------------
+// 函数简介  返回上一页
+// 参数说明  无
+// 返回参数  无
+// 使用示例  <button @click="goBack">返回上一页</button>
+//-------------------------------------------------------------------------------------------------------------------
+function goBack() {
+  history.back()
+}
+
+//-------------------------------------------------------------------------------------------------------------------
 // 函数简介  提交样片申请到 /api/sample
 // 参数说明  无（读取 form）
 // 返回参数  无（更新 status 和 message）
@@ -62,6 +72,36 @@ async function submit() {
       <span>{{ t.series }}</span>
       <input v-model="form.series" maxlength="100" />
     </label>
+
+    <label>
+      <span>{{ t.company }} <em>*</em></span>
+      <input v-model="form.company" maxlength="100" required autocomplete="organization" />
+    </label>
+    <label>
+      <span>{{ t.contact }} <em>*</em></span>
+      <input v-model="form.contact" maxlength="50" required autocomplete="name" />
+    </label>
+    <label>
+      <span>{{ t.phone }} <em>*</em></span>
+      <input v-model="form.phone" maxlength="30" required type="tel" autocomplete="tel" />
+    </label>
+    <label>
+      <span>{{ t.email }} <em>*</em></span>
+      <input v-model="form.email" maxlength="100" required type="email" autocomplete="email" />
+    </label>
+    <label>
+      <span>{{ t.note }}</span>
+      <textarea v-model="form.note" maxlength="2000" rows="5" :placeholder="t.notePlaceholder"></textarea>
+    </label>
+
+    <!-- 防机器人字段：对访客隐藏，正常用户不会填写 -->
+    <input v-model="form.website" class="sample-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
+
+    <div class="sample-actions">
+      <button type="submit" :disabled="status === 'sending'">{{ status === 'sending' ? t.sending : t.submit }}</button>
+      <button type="button" class="sample-back" @click="goBack">{{ t['返回上一页'] }}</button>
+    </div>
+
     <label>
       <span>{{ t.company }} <em>*</em></span>
       <input v-model="form.company" maxlength="100" required autocomplete="organization" />

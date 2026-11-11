@@ -1,5 +1,6 @@
 ---
 outline: false
+pageClass: product-page
 ---
 <!-- 本文件由 网页文字.yaml 自动生成，请勿直接修改 -->
 <div class="series-banner">

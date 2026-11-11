@@ -83,7 +83,7 @@ export function loadText() {
   for (const k of ['首页', '产品中心', '文档中心', '代码下载', '更新日志']) req(t.导航, k, '导航')
   for (const k of ['标题', '副标题', '按钮一', '按钮二', '卡片区标题']) req(t.首页, k, '首页')
   const cards = list(t.首页, '卡片', '首页')
-  if (cards.length !== 3) fail('首页 卡片', `应为 3 张（依次对应文档中心、代码下载、更新日志），当前 ${cards.length} 张`)
+  if (cards.length !== 3) fail('首页 卡片', `应为 3 张（依次对应产品中心、代码下载、更新日志），当前 ${cards.length} 张`)
   cards.forEach((c, i) => { req(c, '标题', `首页 卡片 第 ${i + 1} 张`); req(c, '说明', `首页 卡片 第 ${i + 1} 张`) })
   for (const k of ['标题', '地址', '电话', '邮箱', '地址标签', '电话标签', '邮箱标签']) req(t.首页.联系我们, k, '首页 联系我们')
   for (const k of ['横幅标题', '横幅说明', '列表标题']) req(t.产品中心, k, '产品中心')
@@ -305,25 +305,25 @@ export function generatePages(t) {
       name: String(t.首页.标题),
       tagline: String(t.首页.副标题),
       actions: [
-        { theme: 'brand', text: String(t.首页.按钮一), link: firstDoc },
+        { theme: 'brand', text: String(t.首页.按钮一), link: '/products/' },
         { theme: 'alt', text: String(t.首页.按钮二), link: '/code/' }
       ]
     },
-    // 三张卡片依次对应：文档中心、代码下载、更新日志；更新日志不发布时去掉第三张
+    // 三张卡片依次对应：产品中心、代码下载、更新日志；更新日志不发布时去掉第三张
     features: t.首页.卡片
       .map((c, i) => ({
         title: String(c.标题),
         details: String(c.说明),
-        link: [firstDoc, '/code/', '/changelog/'][i]
+        link: ['/products/', '/code/', '/changelog/'][i]
       }))
       .filter((c) => t.更新日志.已发布 || c.link !== '/changelog/')
   }
   writePage('index.md', `---\n${YAML.stringify(home)}---`)
 
-  // 产品中心
+  // 产品中心（pageClass: product-page 用于加宽内容区、收窄侧边栏，样式见 custom.css 第 14 段）
   const series = t.产品系列
   writePage('products/index.md', [
-    '---\noutline: false\n---',
+    '---\noutline: false\npageClass: product-page\n---',
     banner(t.产品中心.横幅标题, t.产品中心.横幅说明, [nav.首页, nav.产品中心]),
     `## ${t.产品中心.列表标题}`,
     table(t.产品中心.列表表头, []).split('\n').slice(0, 2).join('\n') + '\n' +
@@ -347,7 +347,7 @@ export function generatePages(t) {
       return `::: details ${String(g.名称).replace(/\r?\n/g, ' ')}\n<DownloadList dir="${s.目录}/${g.文件夹}" />\n:::`
     })
     writePage(`products/${s.目录}.md`, [
-      '---\noutline: false\n---',
+      '---\noutline: false\npageClass: product-page\n---',
       banner(s.名称, s.简介, [nav.首页, nav.产品中心, s.名称]),
       `<div class="series-actions">\n${buttons.join('\n')}\n</div>`,
       `## ${sp.选型标题}`,
@@ -362,7 +362,8 @@ export function generatePages(t) {
   const docFiles = []
   for (const g of groups) {
     for (const p of g.页面) {
-      writePage(`docs/${p.文件}.md`, `# ${p.标题}\n\n${p.正文}`)
+      // pageClass: doc-page 用于收窄左侧栏（与产品中心同宽），样式见 custom.css 第 15 段
+      writePage(`docs/${p.文件}.md`, `---\npageClass: doc-page\n---\n\n# ${p.标题}\n\n${p.正文}`)
       docFiles.push(`${p.文件}.md`)
     }
   }

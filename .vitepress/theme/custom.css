@@ -1,30 +1,42 @@
 /* ==========================================================================
-   企业风格主题（参考 lksmcu.com）：深海军蓝主色、白底、浅灰分区、卡片悬浮
+   企业风格主题（参考 lksmcu.com）：白底黑字、灰色细线分隔、卡片悬浮，不使用彩色色块
+   颜色只在本段定义，其他地方都引用这里的变量；以后要加主色只需改本段
    ========================================================================== */
 
 /* ---------- 1. 全局配色与字体 ---------- */
 :root {
-  --brand-navy: #17334e;
-  --brand-navy-light: #24507a;
-  --brand-navy-dark: #0f2235;
+  /* 强调色：黑色（变量名沿用 navy，历史原因，值已改为黑/灰） */
+  --brand-navy: #1f1f1f;
+  --brand-navy-light: #555555;
+  --brand-navy-dark: #000000;
+  /* 强调色的 RGB 分量，供半透明遮罩、阴影使用 */
+  --brand-rgb: 0, 0, 0;
+  --brand-dark-rgb: 0, 0, 0;
 
-  --vp-c-brand-1: #17334e;
-  --vp-c-brand-2: #24507a;
-  --vp-c-brand-3: #17334e;
-  --vp-c-brand-soft: rgba(23, 51, 78, 0.1);
+  /* VitePress 的链接、高亮、当前项颜色：黑色（链接靠下划线区分） */
+  --vp-c-brand-1: #1f1f1f;
+  --vp-c-brand-2: #555555;
+  --vp-c-brand-3: #1f1f1f;
+  --vp-c-brand-soft: rgba(0, 0, 0, 0.04);
 
-  --vp-c-bg-alt: #f5f5f5;
-  --vp-c-divider: #ededed;
+  /* 正文与次要文字统一为黑色；--vp-c-text-3 保持默认浅灰，只用于输入框占位提示等 */
+  --vp-c-text-1: #1f1f1f;
+  --vp-c-text-2: #1f1f1f;
+
+  /* 页面分区背景统一为白色；分隔线为浅灰。
+     --vp-c-bg-alt 不改写，保持 VitePress 默认浅灰，只用于代码块、搜索弹窗等内置组件 */
+  --vp-c-divider: #e5e5e5;
 
   --vp-font-family-base: 'Microsoft YaHei UI', 'Microsoft YaHei', 'PingFang SC', ui-sans-serif, system-ui,
     -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
 
-  --vp-button-brand-bg: #ffffff;
-  --vp-button-brand-text: #17334e;
-  --vp-button-brand-border: #ffffff;
-  --vp-button-brand-hover-bg: #ededed;
-  --vp-button-brand-hover-text: #17334e;
-  --vp-button-brand-hover-border: #ededed;
+  /* 首页横幅按钮（在照片上）：主按钮（产品中心）与次按钮（代码下载）均为透明底、白字、白边框 */
+  --vp-button-brand-bg: transparent;
+  --vp-button-brand-text: #ffffff;
+  --vp-button-brand-border: rgba(255, 255, 255, 0.7);
+  --vp-button-brand-hover-bg: rgba(255, 255, 255, 0.12);
+  --vp-button-brand-hover-text: #ffffff;
+  --vp-button-brand-hover-border: #ffffff;
   --vp-button-alt-bg: transparent;
   --vp-button-alt-text: #ffffff;
   --vp-button-alt-border: rgba(255, 255, 255, 0.7);
@@ -33,41 +45,47 @@
   --vp-button-alt-hover-border: #ffffff;
 }
 
+/* 暗色模式：文字与强调色为浅色，不改写 --vp-c-text-1/2（使用 VitePress 暗色默认值） */
 .dark {
-  --vp-c-brand-1: #7fb2e5;
-  --vp-c-brand-2: #a3c8ee;
-  --vp-c-brand-3: #24507a;
-  --vp-c-brand-soft: rgba(127, 178, 229, 0.16);
+  --vp-c-brand-1: #e5e5e5;
+  --vp-c-brand-2: #bbbbbb;
+  --vp-c-brand-3: #e5e5e5;
+  --vp-c-brand-soft: rgba(255, 255, 255, 0.06);
+  --vp-c-text-1: rgba(255, 255, 245, 0.86);
+  --vp-c-text-2: rgba(235, 235, 245, 0.6);
 }
 
-/* ---------- 2. 顶部导航：深蓝底白字 ---------- */
+/* ---------- 2. 顶部导航：白底黑字（首页停在顶部时例外，见 2.1） ---------- */
 .VPNavBar,
-.VPNavBar.has-sidebar .content-body,
-.VPNavBar:not(.home) .content-body,
-.VPNavBar .divider-line {
-  background-color: var(--brand-navy) !important;
+.VPNavBar .content-body,
+.VPNavBar.screen-open {
+  background-color: var(--vp-c-bg) !important;
 }
+.VPNavBar {
+  box-shadow: 0 2px 12px rgba(var(--brand-rgb), 0.08);
+}
+.VPNavBar .divider-line {
+  background-color: transparent !important;
+}
+/* 文字用正文黑色（暗色模式下自动变为浅色） */
 .VPNavBar .title,
 .VPNavBar .VPNavBarMenuLink,
 .VPNavBar .VPNavBarMenuGroup .text,
-.VPNavBar .VPNavBarExtra .icon,
-.VPNavBar .VPNavBarHamburger .top,
-.VPNavBar .VPNavBarHamburger .middle,
-.VPNavBar .VPNavBarHamburger .bottom {
-  color: #ffffff !important;
+.VPNavBar .VPNavBarExtra .icon {
+  color: var(--vp-c-text-1) !important;
 }
 .VPNavBar .VPNavBarHamburger span {
-  background-color: #ffffff !important;
+  background-color: var(--vp-c-text-1) !important;
 }
 .VPNavBar .VPNavBarMenuLink {
   position: relative;
   font-size: 15px;
 }
-.VPNavBar .VPNavBarMenuLink:hover,
-.VPNavBar .VPNavBarMenuLink.active {
-  color: #ffffff !important;
-  opacity: 1;
+.VPNavBar .VPNavBarMenuLink:hover {
+  color: var(--vp-c-text-1) !important;
+  opacity: 0.7;
 }
+/* 当前所在页：菜单文字下方黑色短横线 */
 .VPNavBar .VPNavBarMenuLink.active::after {
   content: '';
   position: absolute;
@@ -75,20 +93,64 @@
   right: 12px;
   bottom: 10px;
   height: 2px;
-  background: #ffffff;
+  background: var(--vp-c-brand-1);
 }
 .VPNavBar .DocSearch-Button {
-  background: rgba(255, 255, 255, 0.12);
-}
-.VPNavBar .DocSearch-Button .DocSearch-Search-Icon,
-.VPNavBar .DocSearch-Button-Placeholder {
-  color: rgba(255, 255, 255, 0.85);
-}
-.VPNavBar .VPSwitchAppearance {
-  background-color: rgba(255, 255, 255, 0.2);
+  background: var(--vp-c-bg);
+  border: 1px solid var(--vp-c-divider);
 }
 
-/* ---------- 3. 首页横幅：整幅深蓝渐变 ---------- */
+/* ---------- 2.1 首页导航：停在顶部时透明（直接显示横幅照片）、白字；下翻后与其他页面一样白底黑字并固定在顶部 ----------
+   VitePress 给首页导航栏加 .home，页面在最顶端时再加 .top（滚动距离为 0），手机端打开菜单时加 .screen-open。 */
+.VPNavBar.home.top:not(.screen-open),
+.VPNavBar.home.top:not(.screen-open) .content-body {
+  background-color: transparent !important;
+}
+.VPNavBar.home.top:not(.screen-open) {
+  box-shadow: none;
+}
+.VPNavBar.home.top:not(.screen-open) .title,
+.VPNavBar.home.top:not(.screen-open) .VPNavBarMenuLink,
+.VPNavBar.home.top:not(.screen-open) .VPNavBarMenuGroup .text,
+.VPNavBar.home.top:not(.screen-open) .VPNavBarExtra .icon {
+  color: #ffffff !important;
+}
+.VPNavBar.home.top:not(.screen-open) .VPNavBarHamburger span {
+  background-color: #ffffff !important;
+}
+.VPNavBar.home.top:not(.screen-open) .VPNavBarMenuLink.active::after {
+  background: #ffffff;
+}
+.VPNavBar.home.top:not(.screen-open) .DocSearch-Button {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: transparent;
+}
+.VPNavBar.home.top:not(.screen-open) .DocSearch-Button .DocSearch-Search-Icon,
+.VPNavBar.home.top:not(.screen-open) .DocSearch-Button-Placeholder {
+  color: rgba(255, 255, 255, 0.85);
+}
+/* 快捷键提示「Ctrl K」：在照片上为白字、半透明白边框
+   （「Ctrl」由 ::after 生成，颜色默认取 --docsearch-muted-color，需单独指定） */
+.VPNavBar.home.top:not(.screen-open) .DocSearch-Button .DocSearch-Button-Key {
+  color: #ffffff;
+  border-color: rgba(255, 255, 255, 0.5);
+}
+.VPNavBar.home.top:not(.screen-open) .DocSearch-Button .DocSearch-Button-Key:first-child:after {
+  color: #ffffff;
+}
+.VPNavBar.home.top:not(.screen-open) .VPSwitchAppearance {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+/* 手机/平板（<960px）默认导航不固定，首页改为吸顶，下翻时保持在顶部
+   （:has 需较新浏览器：Chrome 105+、Safari 15.4+、Firefox 121+；旧浏览器上导航随页面滚走，不影响使用） */
+@media (max-width: 959px) {
+  .VPNav:has(.VPNavBar.home) {
+    position: sticky;
+    top: 0;
+  }
+}
+
+/* ---------- 3. 首页横幅：背景图 + 左侧半透明黑色遮罩（保证白字可读） ---------- */
 .VPHome {
   padding-bottom: 0 !important;
 }
@@ -96,9 +158,14 @@
   margin-top: calc(var(--vp-nav-height) * -1) !important;
   padding: calc(var(--vp-nav-height) + 96px) 24px 104px !important;
   background:
-    linear-gradient(90deg, rgba(15, 34, 53, 0.85) 0%, rgba(15, 34, 53, 0.55) 45%, rgba(15, 34, 53, 0.1) 100%),
+    linear-gradient(90deg, rgba(var(--brand-dark-rgb), 0.5) 0%, rgba(var(--brand-dark-rgb), 0.2) 45%, rgba(var(--brand-dark-rgb), 0) 100%),
     url('/hero-bg.jpg') center / cover no-repeat,
     var(--brand-navy-dark);
+}
+/* 遮罩变淡后，给横幅文字加阴影保证可读 */
+.VPHero .name,
+.VPHero .tagline {
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.45);
 }
 .VPHero .name,
 .VPHero .name .clip {
@@ -123,15 +190,15 @@
   line-height: 46px !important;
 }
 
-/* ---------- 4. 首页功能卡片：浅灰底、白卡片、悬浮上移 ---------- */
+/* ---------- 4. 首页功能卡片：白底、白卡片（阴影区分）、悬浮上移 ---------- */
 .VPFeatures {
   padding: 0 24px 96px !important;
-  background: var(--vp-c-bg-alt);
+  background: var(--vp-c-bg);
 }
 /* 卡片区标题：文字来自 网页文字.yaml，由 FeaturesTitle.vue 插入到卡片区上方 */
 .features-title {
   padding: 72px 24px 40px;
-  background: var(--vp-c-bg-alt);
+  background: var(--vp-c-bg);
   text-align: center;
   font-size: 30px;
   font-weight: 600;
@@ -139,79 +206,88 @@
 }
 .VPFeature {
   background: var(--vp-c-bg) !important;
-  border: none !important;
-  border-top: 3px solid var(--brand-navy) !important;
+  border: 1px solid var(--vp-c-divider) !important;
   border-radius: 4px !important;
   box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
   transition: transform 0.25s, box-shadow 0.25s;
 }
 .VPFeature:hover {
   transform: translateY(-6px);
-  box-shadow: 0 12px 28px rgba(23, 51, 78, 0.18);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
 }
 .VPFeature .title {
   font-size: 20px !important;
 }
+.VPFeature .details,
 .VPFeature .link-text-value {
-  color: var(--vp-c-brand-1) !important;
+  color: var(--vp-c-text-1) !important;
 }
 
 /* ---------- 5. 文档页：侧边栏与标题 ---------- */
+/* 侧边栏白底，右侧细线与正文分隔 */
 .VPSidebar {
-  background-color: #f6f6f6 !important;
+  background-color: var(--vp-c-bg) !important;
 }
-.dark .VPSidebar {
-  background-color: var(--vp-c-bg-alt) !important;
+@media (min-width: 960px) {
+  .VPSidebar {
+    border-right: 1px solid var(--vp-c-divider);
+  }
 }
 .VPSidebarItem.level-0 > .item .text {
   font-weight: 600;
 }
+.VPSidebarItem .text {
+  color: var(--vp-c-text-1) !important;
+}
+/* 当前所在项：加粗 + 浅灰底，不用彩色 */
 .VPSidebarItem.is-active > .item .link > .text {
-  color: var(--vp-c-brand-1) !important;
+  font-weight: 600;
+}
+.VPSidebarItem.is-active > .item {
+  background: var(--vp-c-brand-soft);
+  border-radius: 4px;
 }
 .vp-doc h1 {
   padding-bottom: 16px;
-  border-bottom: 2px solid var(--brand-navy);
-}
-.dark .vp-doc h1 {
-  border-bottom-color: var(--vp-c-brand-1);
+  border-bottom: 1px solid var(--vp-c-divider);
 }
 .vp-doc h2 {
   border-top: none;
-  padding-left: 12px;
-  border-left: 4px solid var(--vp-c-brand-1);
 }
 
-/* ---------- 6. 表格：深蓝表头（下载页列表） ---------- */
+/* ---------- 6. 表格：浅灰表头、黑色文字 ---------- */
 .vp-doc table {
   display: table;
   width: 100%;
 }
 .vp-doc th {
-  background: var(--brand-navy) !important;
-  color: #ffffff !important;
+  background: var(--vp-c-bg-soft) !important;
+  color: var(--vp-c-text-1) !important;
+}
+.vp-doc td {
+  color: var(--vp-c-text-1);
 }
 .vp-doc tr:hover td {
   background: var(--vp-c-brand-soft);
 }
 
-/* ---------- 7. 页脚：深色底 ---------- */
+/* ---------- 7. 页脚：白底深色字，顶部细线与正文分隔 ---------- */
 .VPFooter {
-  background: var(--brand-navy-dark) !important;
-  border-top: none !important;
+  background: var(--vp-c-bg) !important;
+  border-top: 1px solid var(--vp-c-divider) !important;
 }
 .VPFooter .message,
 .VPFooter .copyright {
-  color: rgba(255, 255, 255, 0.7) !important;
+  color: var(--vp-c-text-1) !important;
 }
-/* 免责声明：字号略小、颜色略淡，限制行宽便于阅读 */
+/* 免责声明：字号略小，限制行宽便于阅读 */
 .VPFooter .footer-disclaimer {
   display: inline-block;
   max-width: 880px;
   margin-top: 8px;
   font-size: 12px;
   line-height: 1.7;
-  color: rgba(255, 255, 255, 0.55);
+  color: var(--vp-c-text-1);
 }
 /* 默认主题在有侧边栏的页面（文档中心、产品中心）隐藏页脚；为了让免责声明在所有页面可见，改为显示，
    并让出左侧侧边栏的宽度，避免被侧边栏遮挡 */
@@ -243,29 +319,28 @@
   }
 }
 
-/* ---------- 9. 产品系列页（参考 lksmcu 产品页：横幅 + 面包屑 + 按钮 + 选型表 + 资料折叠） ---------- */
+/* ---------- 9. 产品系列页（参考 lksmcu 产品页：标题区 + 面包屑 + 按钮 + 选型表 + 资料折叠） ---------- */
+/* 标题区：白底黑字，底部细线（不再使用背景图和彩色遮罩） */
 .series-banner {
-  padding: 40px 32px;
-  border-radius: 4px;
-  color: #ffffff;
-  background:
-    linear-gradient(90deg, rgba(15, 34, 53, 0.9) 0%, rgba(15, 34, 53, 0.6) 100%),
-    url('/hero-bg.jpg') center / cover no-repeat;
+  padding: 8px 0 24px;
+  border-bottom: 1px solid var(--vp-c-divider);
+  color: var(--vp-c-text-1);
+  background: none;
 }
 .vp-doc .series-banner h1 {
   margin: 0;
   padding: 0;
   border: none;
-  color: #ffffff;
+  color: var(--vp-c-text-1);
 }
 .vp-doc .series-banner p {
   margin: 12px 0 0;
-  color: rgba(255, 255, 255, 0.85);
+  color: var(--vp-c-text-1);
 }
 .breadcrumb {
   margin: 16px 0;
   font-size: 14px;
-  color: var(--vp-c-text-2);
+  color: var(--vp-c-text-1);
 }
 .series-actions {
   display: flex;
@@ -273,22 +348,29 @@
   gap: 12px;
   margin-bottom: 24px;
 }
+/* 按钮：白底黑字黑边框，鼠标移上去浅灰底；主按钮（样片申请）文字加粗 */
 .vp-doc a.series-btn {
   padding: 6px 20px;
-  border: 1px solid var(--brand-navy);
+  border: 1px solid var(--vp-c-text-1);
   border-radius: 4px;
-  color: var(--brand-navy);
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
   text-decoration: none;
-  transition: background 0.2s, color 0.2s;
+  transition: background 0.2s;
 }
-.vp-doc a.series-btn:hover,
 .vp-doc a.series-btn.primary {
-  background: var(--brand-navy);
-  color: #ffffff;
+  font-weight: 600;
+}
+.vp-doc a.series-btn:hover {
+  background: var(--vp-c-bg-soft);
+  color: var(--vp-c-text-1);
 }
 .vp-doc .details {
-  border-left: 4px solid var(--brand-navy);
-  background: var(--vp-c-bg-alt);
+  border: 1px solid var(--vp-c-divider);
+  background: var(--vp-c-bg);
+}
+.vp-doc .details summary {
+  color: var(--vp-c-text-1);
 }
 
 /* ---------- 10. 样片申请表单（SampleForm.vue） ---------- */
@@ -298,11 +380,32 @@
 }
 .vp-doc .sample-intro {
   margin: 0 0 20px;
-  color: var(--vp-c-text-2);
+  color: var(--vp-c-text-1);
 }
 .sample-form label {
   display: block;
   margin-bottom: 16px;
+}
+.sample-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  margin-bottom: 12px;
+}
+.sample-actions button {
+  padding: 8px 33px;
+  cursor: pointer;
+  border-radius: 4px;
+  font-size: 16px;
+  font-weight: 600;
+}
+.sample-actions button.sample-back {
+  border: 1px solid var(--vp-c-text-1);
+  color: var(--vp-c-text-1);
+  background: var(--vp-c-bg);
+}
+.sample-actions button.sample-back:hover {
+  background: var(--vp-c-bg-soft);
 }
 .sample-form label span {
   display: block;
@@ -327,7 +430,7 @@
 .sample-form input:focus,
 .sample-form textarea:focus {
   outline: none;
-  border-color: var(--vp-c-brand-1);
+  border-color: var(--vp-c-text-1);
 }
 .sample-form textarea {
   resize: vertical;
@@ -339,16 +442,19 @@
   height: 1px;
   opacity: 0;
 }
+/* 提交按钮：白底黑字黑边框，鼠标移上去浅灰底 */
 .sample-form button {
   padding: 8px 40px;
+  border: 1px solid var(--vp-c-text-1);
   border-radius: 4px;
-  background: var(--brand-navy);
-  color: #ffffff;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
   font-size: 16px;
+  font-weight: 600;
   transition: background 0.2s;
 }
 .sample-form button:hover:not(:disabled) {
-  background: var(--brand-navy-light);
+  background: var(--vp-c-bg-soft);
 }
 .sample-form button:disabled {
   opacity: 0.6;
@@ -388,14 +494,15 @@
   flex: 1 1 280px;
   max-width: 360px;
   padding: 24px;
-  border-top: 3px solid var(--brand-navy);
+  border: 1px solid var(--vp-c-divider);
   border-radius: 4px;
-  background: var(--vp-c-bg-alt);
+  background: var(--vp-c-bg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
 }
 .home-contact-item .label {
   margin-bottom: 8px;
   font-size: 14px;
-  color: var(--vp-c-text-2);
+  color: var(--vp-c-text-1);
 }
 .home-contact-item .value {
   font-size: 16px;
@@ -404,7 +511,8 @@
   word-break: break-all;
 }
 .home-contact-item a.value:hover {
-  color: var(--vp-c-brand-1);
+  color: var(--vp-c-text-1);
+  text-decoration: underline;
 }
 
 /* ---------- 12. 产品选型表：18 列，横向滚动；表头中文在上、英文在下；首列固定 ---------- */
@@ -462,4 +570,85 @@
 }
 .vp-doc .download-list .dl-desc {
   min-width: 160px;
+}
+
+/* ---------- 14. 产品中心与产品系列页：内容区加宽、左侧栏收窄 ----------
+   只作用于带 pageClass: product-page 的页面（由 generate.mjs 生成），其他页面不受影响。
+   做法：在该页面范围内改写两个布局变量——
+     --vp-sidebar-width      侧边栏宽度：默认 272px → 200px
+     --vp-layout-max-width   页面最大宽度：默认 1440px → 1680px
+   VitePress 自带的侧边栏、内容区、页脚偏移都按这两个变量计算，会自动跟着变。 */
+.product-page {
+  --vp-sidebar-width: 200px;
+}
+/* VitePress 在 ≥1440px 屏幕上按「(屏幕宽 - 最大宽度) / 2」计算两侧留白，要求屏幕不窄于最大宽度，
+   所以只在 ≥1680px 的屏幕上把最大宽度调到 1680px，否则 1440～1680px 屏幕上侧边栏会被算得过窄 */
+@media (min-width: 1680px) {
+  .product-page {
+    --vp-layout-max-width: 1680px;
+  }
+}
+/* 默认正文最大宽度约 688～784px，在产品页取消限制，铺满侧边栏右侧的空间 */
+.product-page .VPDoc .container,
+.product-page .VPDoc .content,
+.product-page .VPDoc .content-container {
+  max-width: none !important;
+}
+/* 侧边栏右内边距由 32px 减为 20px；左内边距只在 960～1439px 调整（≥1440px 时 VitePress 按公式计算，不改） */
+@media (min-width: 960px) {
+  .product-page .VPSidebar {
+    padding-right: 20px;
+  }
+}
+@media (min-width: 960px) and (max-width: 1439px) {
+  .product-page .VPSidebar {
+    padding-left: 20px;
+  }
+}
+/* 内容区左右留白由 32px 减为 24px */
+@media (min-width: 960px) {
+  .product-page .VPDoc {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+  .product-page .VPDoc .content {
+    padding-left: 24px;
+    padding-right: 24px;
+  }
+}
+
+/* ---------- 15. 文档中心：左侧栏与产品中心同宽 ----------
+   只作用于带 pageClass: doc-page 的页面（由 generate.mjs 为文档中心生成）。
+   侧边栏宽度与内边距与第 14 段产品页一致；正文保留 VitePress 默认最大宽度，便于阅读长段文字。 */
+.doc-page {
+  --vp-sidebar-width: 200px;
+}
+@media (min-width: 960px) {
+  .doc-page .VPSidebar {
+    padding-right: 20px;
+  }
+}
+@media (min-width: 960px) and (max-width: 1439px) {
+  .doc-page .VPSidebar {
+    padding-left: 20px;
+  }
+}
+
+/* ---------- 16. 搜索框与搜索弹窗：字体与标题一致（微软雅黑） ----------
+   VitePress 在中文页面（:lang(zh)）上另设一套字体变量，优先使用 Inter 英文字体，
+   导致搜索按钮、搜索弹窗中的英文、数字与标题不一致。这里在中文页面上同样改写字体变量，
+   并对搜索相关元素显式指定字体（搜索弹窗挂在 body 下，单独指定更稳妥）。 */
+:root:where(:lang(zh)) {
+  --vp-font-family-base: 'Microsoft YaHei UI', 'Microsoft YaHei', 'PingFang SC', ui-sans-serif, system-ui,
+    -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+}
+.DocSearch-Button,
+.DocSearch-Button-Placeholder,
+.DocSearch-Button-Key,
+.VPLocalSearchBox,
+.VPLocalSearchBox input,
+.VPLocalSearchBox kbd,
+.VPLocalSearchBox .title,
+.VPLocalSearchBox .excerpt {
+  font-family: var(--vp-font-family-base) !important;
 }
