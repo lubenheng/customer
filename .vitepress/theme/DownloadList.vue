@@ -1,12 +1,15 @@
 <script setup>
 import { computed } from 'vue'
-import { withBase } from 'vitepress'
+import { withBase, useData } from 'vitepress'
 import { data } from './downloads.data.mjs'
 
 // dir：public/downloads 下的子目录，例如 "code"、"series-1/datasheet"
 const props = defineProps({ dir: { type: String, required: true } })
 
 const files = computed(() => data[props.dir] || [])
+// 表头等文字来自 网页文字.yaml「下载列表」
+const { theme } = useData()
+const text = computed(() => theme.value.pageText.download)
 
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介  生成文件下载地址
@@ -37,15 +40,15 @@ function formatSize(bytes) {
 <template>
   <table v-if="files.length" class="download-list">
     <thead>
-      <tr><th>文件名</th><th>大小</th><th>下载</th></tr>
+      <tr><th>{{ text.name }}</th><th>{{ text.size }}</th><th>{{ text.action }}</th></tr>
     </thead>
     <tbody>
       <tr v-for="f in files" :key="f.name">
         <td>{{ f.name }}</td>
         <td>{{ formatSize(f.size) }}</td>
-        <td><a :href="fileUrl(f.name)" download target="_blank" rel="noopener">下载</a></td>
+        <td><a :href="fileUrl(f.name)" download target="_blank" rel="noopener">{{ text.action }}</a></td>
       </tr>
     </tbody>
   </table>
-  <p v-else class="download-empty">暂无资料。</p>
+  <p v-else class="download-empty">{{ text.empty }}</p>
 </template>

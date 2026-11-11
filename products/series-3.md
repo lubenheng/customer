@@ -1,12 +1,11 @@
 ---
 outline: false
 ---
-
+<!-- 本文件由 网页文字.yaml 自动生成，请勿直接修改 -->
 <div class="series-banner">
   <h1>产品系列三</h1>
   <p>系列简介占位：一句话描述本系列定位与主要应用。</p>
 </div>
-
 <div class="breadcrumb">首页 » 产品中心 » 产品系列三</div>
 
 <div class="series-actions">

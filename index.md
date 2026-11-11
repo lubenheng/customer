@@ -1,6 +1,5 @@
 ---
 layout: home
-
 hero:
   name: 上海灿瑞科技股份有限公司
   tagline: 为国内客户提供最新文档与代码
@@ -11,7 +10,6 @@ hero:
     - theme: alt
       text: 代码下载
       link: /code/
-
 features:
   - title: 文档中心
     details: 快速开始、用户手册与应用笔记。
@@ -23,3 +21,5 @@ features:
     details: 查看文档与代码的版本变更记录。
     link: /changelog/
 ---
+<!-- 本文件由 网页文字.yaml 自动生成，请勿直接修改 -->
+

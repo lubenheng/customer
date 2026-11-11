@@ -125,13 +125,13 @@
 
 /* ---------- 4. 首页功能卡片：浅灰底、白卡片、悬浮上移 ---------- */
 .VPFeatures {
-  padding: 72px 24px 96px !important;
+  padding: 0 24px 96px !important;
   background: var(--vp-c-bg-alt);
 }
-.VPFeatures .container::before {
-  content: '服务导航';
-  display: block;
-  margin-bottom: 40px;
+/* 卡片区标题：文字来自 网页文字.yaml，由 FeaturesTitle.vue 插入到卡片区上方 */
+.features-title {
+  padding: 72px 24px 40px;
+  background: var(--vp-c-bg-alt);
   text-align: center;
   font-size: 30px;
   font-weight: 600;
