@@ -77,18 +77,22 @@ async function submit() {
       <span>{{ t.company }} <em>*</em></span>
       <input v-model="form.company" maxlength="100" required autocomplete="organization" />
     </label>
+
     <label>
       <span>{{ t.contact }} <em>*</em></span>
       <input v-model="form.contact" maxlength="50" required autocomplete="name" />
     </label>
+
     <label>
       <span>{{ t.phone }} <em>*</em></span>
       <input v-model="form.phone" maxlength="30" required type="tel" autocomplete="tel" />
     </label>
+
     <label>
       <span>{{ t.email }} <em>*</em></span>
       <input v-model="form.email" maxlength="100" required type="email" autocomplete="email" />
     </label>
+
     <label>
       <span>{{ t.note }}</span>
       <textarea v-model="form.note" maxlength="2000" rows="5" :placeholder="t.notePlaceholder"></textarea>
@@ -97,38 +101,11 @@ async function submit() {
     <!-- 防机器人字段：对访客隐藏，正常用户不会填写 -->
     <input v-model="form.website" class="sample-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
 
+    <!-- 底部按钮：提交申请、返回上一页并排 -->
     <div class="sample-actions">
       <button type="submit" :disabled="status === 'sending'">{{ status === 'sending' ? t.sending : t.submit }}</button>
-      <button type="button" class="sample-back" @click="goBack">{{ t['返回上一页'] }}</button>
+      <button type="button" class="sample-back" @click="goBack">{{ t.back }}</button>
     </div>
-
-    <label>
-      <span>{{ t.company }} <em>*</em></span>
-      <input v-model="form.company" maxlength="100" required autocomplete="organization" />
-    </label>
-    <label>
-      <span>{{ t.contact }} <em>*</em></span>
-      <input v-model="form.contact" maxlength="50" required autocomplete="name" />
-    </label>
-    <label>
-      <span>{{ t.phone }} <em>*</em></span>
-      <input v-model="form.phone" maxlength="30" required type="tel" autocomplete="tel" />
-    </label>
-    <label>
-      <span>{{ t.email }} <em>*</em></span>
-      <input v-model="form.email" maxlength="100" required type="email" autocomplete="email" />
-    </label>
-    <label>
-      <span>{{ t.note }}</span>
-      <textarea v-model="form.note" maxlength="2000" rows="5" :placeholder="t.notePlaceholder"></textarea>
-    </label>
-
-    <!-- 防机器人字段：对访客隐藏，正常用户不会填写 -->
-    <input v-model="form.website" class="sample-hp" tabindex="-1" autocomplete="off" aria-hidden="true" />
-
-    <button type="submit" :disabled="status === 'sending'">
-      {{ status === 'sending' ? t.sending : t.submit }}
-    </button>
     <p v-if="message" :class="['sample-msg', status]">{{ message }}</p>
   </form>
 </template>

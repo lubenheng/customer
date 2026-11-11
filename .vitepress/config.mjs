@@ -81,8 +81,9 @@ export default defineConfig({
     nav: [
       { text: String(t.导航.首页), link: '/' },
       { text: String(t.导航.产品中心), link: '/products/', activeMatch: '^/products/' },
-      { text: String(t.导航.文档中心), link: firstDoc, activeMatch: '^/docs/' },
+      // 顺序：首页、产品中心、代码下载、文档中心
       { text: String(t.导航.代码下载), link: '/code/' },
+      { text: String(t.导航.文档中心), link: firstDoc, activeMatch: '^/docs/' },
       // 更新日志设为不发布时，导航中不显示
       ...(t.更新日志.已发布 ? [{ text: String(t.导航.更新日志), link: '/changelog/' }] : [])
     ],
@@ -167,7 +168,8 @@ export default defineConfig({
         success: String(t.样片申请.成功),
         fail: String(t.样片申请.失败),
         required: String(t.样片申请.必填提示),
-        badEmail: String(t.样片申请.邮箱格式错误)
+        badEmail: String(t.样片申请.邮箱格式错误),
+        back: String(t.样片申请.返回上一页)
       },
       download: {
         name: String(t.下载列表.文件名),
