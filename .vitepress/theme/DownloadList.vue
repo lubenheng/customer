@@ -40,13 +40,23 @@ function formatSize(bytes) {
 <template>
   <table v-if="files.length" class="download-list">
     <thead>
-      <tr><th>{{ text.name }}</th><th>{{ text.size }}</th><th>{{ text.action }}</th></tr>
+      <tr>
+        <th>{{ text.name }}</th>
+        <th>{{ text.desc }}</th>
+        <th>{{ text.version }}</th>
+        <th>{{ text.date }}</th>
+        <th>{{ text.size }}</th>
+        <th>{{ text.action }}</th>
+      </tr>
     </thead>
     <tbody>
       <tr v-for="f in files" :key="f.name">
-        <td>{{ f.name }}</td>
-        <td>{{ formatSize(f.size) }}</td>
-        <td><a :href="fileUrl(f.name)" download target="_blank" rel="noopener">{{ text.action }}</a></td>
+        <td class="dl-name">{{ f.name }}</td>
+        <td class="dl-desc">{{ f.desc || '—' }}</td>
+        <td class="dl-nowrap">{{ f.version || '—' }}</td>
+        <td class="dl-nowrap">{{ f.date || '—' }}</td>
+        <td class="dl-nowrap">{{ formatSize(f.size) }}</td>
+        <td class="dl-nowrap"><a :href="fileUrl(f.name)" download target="_blank" rel="noopener">{{ text.action }}</a></td>
       </tr>
     </tbody>
   </table>

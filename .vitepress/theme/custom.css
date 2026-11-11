@@ -204,6 +204,30 @@
 .VPFooter .copyright {
   color: rgba(255, 255, 255, 0.7) !important;
 }
+/* 免责声明：字号略小、颜色略淡，限制行宽便于阅读 */
+.VPFooter .footer-disclaimer {
+  display: inline-block;
+  max-width: 880px;
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgba(255, 255, 255, 0.55);
+}
+/* 默认主题在有侧边栏的页面（文档中心、产品中心）隐藏页脚；为了让免责声明在所有页面可见，改为显示，
+   并让出左侧侧边栏的宽度，避免被侧边栏遮挡 */
+.VPFooter.has-sidebar {
+  display: block !important;
+}
+@media (min-width: 960px) {
+  .VPFooter.has-sidebar {
+    padding-left: calc(var(--vp-sidebar-width) + 32px) !important;
+  }
+}
+@media (min-width: 1440px) {
+  .VPFooter.has-sidebar {
+    padding-left: calc((100vw - var(--vp-layout-max-width)) / 2 + var(--vp-sidebar-width) + 32px) !important;
+  }
+}
 
 /* ---------- 8. 移动端 ---------- */
 @media (max-width: 768px) {
@@ -265,4 +289,177 @@
 .vp-doc .details {
   border-left: 4px solid var(--brand-navy);
   background: var(--vp-c-bg-alt);
+}
+
+/* ---------- 10. 样片申请表单（SampleForm.vue） ---------- */
+.sample-form {
+  max-width: 640px;
+  margin-top: 24px;
+}
+.vp-doc .sample-intro {
+  margin: 0 0 20px;
+  color: var(--vp-c-text-2);
+}
+.sample-form label {
+  display: block;
+  margin-bottom: 16px;
+}
+.sample-form label span {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+}
+.sample-form label em {
+  color: #d03050;
+  font-style: normal;
+}
+.sample-form input,
+.sample-form textarea {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  background: var(--vp-c-bg);
+  font-size: 15px;
+  color: var(--vp-c-text-1);
+  transition: border-color 0.2s;
+}
+.sample-form input:focus,
+.sample-form textarea:focus {
+  outline: none;
+  border-color: var(--vp-c-brand-1);
+}
+.sample-form textarea {
+  resize: vertical;
+}
+.sample-form .sample-hp {
+  position: absolute;
+  left: -9999px;
+  width: 1px;
+  height: 1px;
+  opacity: 0;
+}
+.sample-form button {
+  padding: 8px 40px;
+  border-radius: 4px;
+  background: var(--brand-navy);
+  color: #ffffff;
+  font-size: 16px;
+  transition: background 0.2s;
+}
+.sample-form button:hover:not(:disabled) {
+  background: var(--brand-navy-light);
+}
+.sample-form button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+.vp-doc .sample-msg {
+  margin-top: 12px;
+  font-weight: 600;
+}
+.vp-doc .sample-msg.ok {
+  color: #18a058;
+}
+.vp-doc .sample-msg.error {
+  color: #d03050;
+}
+
+/* ---------- 11. 首页「联系我们」（ContactUs.vue） ---------- */
+.home-contact {
+  padding: 64px 24px 72px;
+  text-align: center;
+}
+.home-contact h2 {
+  margin: 0 0 40px;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+.home-contact-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  max-width: 1152px;
+  margin: 0 auto;
+}
+.home-contact-item {
+  flex: 1 1 280px;
+  max-width: 360px;
+  padding: 24px;
+  border-top: 3px solid var(--brand-navy);
+  border-radius: 4px;
+  background: var(--vp-c-bg-alt);
+}
+.home-contact-item .label {
+  margin-bottom: 8px;
+  font-size: 14px;
+  color: var(--vp-c-text-2);
+}
+.home-contact-item .value {
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  word-break: break-all;
+}
+.home-contact-item a.value:hover {
+  color: var(--vp-c-brand-1);
+}
+
+/* ---------- 12. 产品选型表：18 列，横向滚动；表头中文在上、英文在下；首列固定 ---------- */
+.vp-doc .selection-table {
+  margin: 16px 0;
+  overflow-x: auto;
+}
+.vp-doc .selection-table table {
+  display: table;
+  width: max-content;
+  min-width: 100%;
+  margin: 0;
+  border-collapse: collapse;
+}
+.vp-doc .selection-table th,
+.vp-doc .selection-table td {
+  padding: 8px 12px;
+  white-space: nowrap;
+  text-align: center;
+  font-size: 13px;
+}
+.vp-doc .selection-table th {
+  vertical-align: middle;
+  line-height: 1.4;
+}
+.vp-doc .selection-table .th-cn {
+  font-weight: 600;
+}
+.vp-doc .selection-table .th-en {
+  margin-top: 2px;
+  font-size: 12px;
+  font-weight: 400;
+  opacity: 0.75;
+}
+/* 首列（型号）横向滚动时固定在左侧 */
+.vp-doc .selection-table th:first-child,
+.vp-doc .selection-table td:first-child {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  text-align: left;
+}
+.vp-doc .selection-table td:first-child {
+  background: var(--vp-c-bg);
+  font-weight: 600;
+}
+
+/* ---------- 13. 下载列表（DownloadList.vue）：文件说明列可换行，其余列不换行 ---------- */
+.vp-doc .download-list th,
+.vp-doc .download-list .dl-nowrap {
+  white-space: nowrap;
+}
+.vp-doc .download-list .dl-name {
+  word-break: break-all;
+}
+.vp-doc .download-list .dl-desc {
+  min-width: 160px;
 }

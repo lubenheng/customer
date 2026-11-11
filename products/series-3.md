@@ -9,45 +9,50 @@ outline: false
 <div class="breadcrumb">首页 » 产品中心 » 产品系列三</div>
 
 <div class="series-actions">
-  <a class="series-btn primary" href="#">样片申请</a>
+  <a class="series-btn primary" href="/sample/?series=%E4%BA%A7%E5%93%81%E7%B3%BB%E5%88%97%E4%B8%89">样片申请</a>
   <a class="series-btn" href="#">购买咨询</a>
   <a class="series-btn" href="/products/">返回列表</a>
 </div>
 
 ## 产品选型
 
-| 型号 | 主频(MHz) | Flash(kB) | RAM(kB) | ADC 通道 | 通信接口 | 封装 |
-| --- | --- | --- | --- | --- | --- | --- |
-| 型号占位-01 | — | — | — | — | — | — |
-| 型号占位-02 | — | — | — | — | — | — |
-| 型号占位-03 | — | — | — | — | — | — |
+<div class="selection-table">
+<table>
+<thead><tr><th><div class="th-cn">型号</div><div class="th-en">Device</div></th><th><div class="th-cn">主频</div><div class="th-en">Freq(MHz)</div></th><th><div class="th-cn">闪存</div><div class="th-en">Flash(kB)</div></th><th><div class="th-cn">内存</div><div class="th-en">RAM(kB)</div></th><th><div class="th-cn">ADC通道数</div><div class="th-en">ADC Ch.</div></th><th><div class="th-cn">数模转换</div><div class="th-en">DAC</div></th><th><div class="th-cn">比较器</div><div class="th-en">Comp</div></th><th><div class="th-cn">比较器通道数</div><div class="th-en">Comp Ch.</div></th><th><div class="th-cn">运放</div><div class="th-en">OPA</div></th><th><div class="th-cn">霍尔接口</div><div class="th-en">HaLL</div></th><th><div class="th-cn">SPI接口</div><div class="th-en">SPI</div></th><th><div class="th-cn">IIC接口</div><div class="th-en">IIC</div></th><th><div class="th-cn">串口</div><div class="th-en">UART</div></th><th><div class="th-cn">CAN总线</div><div class="th-en">CAN</div></th><th><div class="th-cn">正交编码</div><div class="th-en">QEP</div></th><th><div class="th-cn">栅极驱动</div><div class="th-en">Gate driver</div></th><th><div class="th-cn">其他</div><div class="th-en">Others</div></th><th><div class="th-cn">封装</div><div class="th-en">Package</div></th></tr></thead>
+<tbody>
+<tr><td>型号占位-01</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>型号占位-02</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+<tr><td>型号占位-03</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td><td>—</td></tr>
+</tbody>
+</table>
+</div>
 
 ## 设计资源
 
-::: details Datasheet
+::: details 数据手册
 <DownloadList dir="series-3/datasheet" />
 :::
 
-::: details User Manual
+::: details 用户手册
 <DownloadList dir="series-3/user-manual" />
 :::
 
-::: details Device Pack
+::: details 器件支持包
 <DownloadList dir="series-3/device-pack" />
 :::
 
-::: details Demo Board
+::: details 演示板
 <DownloadList dir="series-3/demo-board" />
 :::
 
-::: details Software Reference
+::: details 软件参考
 <DownloadList dir="series-3/software-reference" />
 :::
 
-::: details Tools & Software
+::: details 工具与软件
 <DownloadList dir="series-3/tools-software" />
 :::
 
-::: details Application Note
+::: details 应用笔记
 <DownloadList dir="series-3/application-note" />
 :::

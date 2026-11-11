@@ -79,12 +79,13 @@ export function loadText() {
   if (!t || typeof t !== 'object') fail('文件', '内容为空')
 
   // 必填文字字段
-  for (const k of ['名称', '描述', '页脚说明', '页脚版权']) req(t.站点, k, '站点')
+  for (const k of ['名称', '描述', '页脚说明', '页脚版权', '页脚免责']) req(t.站点, k, '站点')
   for (const k of ['首页', '产品中心', '文档中心', '代码下载', '更新日志']) req(t.导航, k, '导航')
   for (const k of ['标题', '副标题', '按钮一', '按钮二', '卡片区标题']) req(t.首页, k, '首页')
   const cards = list(t.首页, '卡片', '首页')
   if (cards.length !== 3) fail('首页 卡片', `应为 3 张（依次对应文档中心、代码下载、更新日志），当前 ${cards.length} 张`)
   cards.forEach((c, i) => { req(c, '标题', `首页 卡片 第 ${i + 1} 张`); req(c, '说明', `首页 卡片 第 ${i + 1} 张`) })
+  for (const k of ['标题', '地址', '电话', '邮箱', '地址标签', '电话标签', '邮箱标签']) req(t.首页.联系我们, k, '首页 联系我们')
   for (const k of ['横幅标题', '横幅说明', '列表标题']) req(t.产品中心, k, '产品中心')
   if (list(t.产品中心, '列表表头', '产品中心').length !== 2) fail('产品中心 列表表头', '应为 2 项，如 [系列, 简介]')
 
@@ -98,6 +99,10 @@ export function loadText() {
     checkSlug(req(g, '文件夹', where), folderSeen, where, '文件夹')
   })
 
+  const head = list(sp, '选型表头', '产品系列页')
+  if (!head.length) fail('产品系列页 选型表头', '至少需要 1 列')
+  head.forEach((h, i) => { req(h, '中文', `产品系列页 选型表头 第 ${i + 1} 列`); req(h, '英文', `产品系列页 选型表头 第 ${i + 1} 列`) })
+
   const seriesSeen = new Set()
   const series = list(t, '产品系列', '产品系列')
   if (!series.length) fail('产品系列', '至少需要 1 个系列')
@@ -106,10 +111,11 @@ export function loadText() {
     req(s, '名称', where)
     req(s, '简介', where)
     checkSlug(req(s, '目录', where), seriesSeen, where, '目录')
-    const head = list(s.选型表, '表头', `${req(s, '名称', where)} 选型表`)
+    if (!s.选型表 || typeof s.选型表 !== 'object') fail(where, '缺少「选型表」')
+    if (s.选型表.表头 !== undefined) fail(`${s.名称} 选型表`, '表头已统一移到「产品系列页 → 选型表头」，请删除这里的「表头」')
     list(s.选型表, '数据', `${s.名称} 选型表`).forEach((row, r) => {
       if (!Array.isArray(row)) fail(`${s.名称} 选型表 数据 第 ${r + 1} 行`, '应写成 [值1, 值2, ...]')
-      if (row.length !== head.length) fail(`${s.名称} 选型表 数据 第 ${r + 1} 行`, `有 ${row.length} 格，表头有 ${head.length} 列，必须一致`)
+      if (row.length !== head.length) fail(`${s.名称} 选型表 数据 第 ${r + 1} 行`, `有 ${row.length} 格，选型表头有 ${head.length} 列，必须一致`)
     })
   })
 
@@ -126,8 +132,14 @@ export function loadText() {
       req(p, '标题', pw)
       req(p, '正文', pw)
       checkSlug(req(p, '文件', pw), docSeen, pw, '文件')
+      if (p.发布 !== undefined && !['是', '否', true, false].includes(p.发布)) fail(pw, '「发布」只能写 是 或 否')
     })
   })
+  // 去掉「发布: 否」的文档；某分组的文档全部不发布时，整个分组不显示
+  t.文档中心.分组 = groups
+    .map((g) => ({ ...g, 页面: g.页面.filter((p) => p.发布 !== '否' && p.发布 !== false) }))
+    .filter((g) => g.页面.length)
+  if (!t.文档中心.分组.length) fail('文档中心', '至少需要 1 篇「发布: 是」的文档（导航和首页按钮会链接到第一篇）')
 
   req(t.代码下载, '标题', '代码下载')
   req(t.代码下载, '说明', '代码下载')
@@ -139,8 +151,12 @@ export function loadText() {
     req(g, '名称', where)
     checkSlug(req(g, '文件夹', where), codeSeen, where, '文件夹')
   })
-  for (const k of ['文件名', '大小', '下载', '无文件']) req(t.下载列表, k, '下载列表')
+  for (const k of ['文件名', '说明', '版本', '更新日期', '大小', '下载', '无文件']) req(t.下载列表, k, '下载列表')
+  for (const k of ['标题', '说明', '产品', '公司名称', '联系人', '联系电话', '联系邮箱', '申请说明', '申请说明提示',
+    '提交按钮', '提交中', '成功', '失败', '必填提示', '邮箱格式错误']) req(t.样片申请, k, '样片申请')
   for (const k of ['标题', '正文']) req(t.更新日志, k, '更新日志')
+  if (t.更新日志.发布 !== undefined && !['是', '否', true, false].includes(t.更新日志.发布)) fail('更新日志', '「发布」只能写 是 或 否')
+  t.更新日志.已发布 = t.更新日志.发布 !== '否' && t.更新日志.发布 !== false
   for (const k of ['本页目录', '上一页', '下一页', '返回顶部', '菜单', '外观', '切换到浅色', '切换到深色', '跳到正文',
     '搜索按钮', '搜索无结果', '搜索显示详情', '搜索清除', '搜索返回', '搜索选择', '搜索切换', '搜索关闭',
     '页面不存在标题', '页面不存在说明', '页面不存在按钮']) req(t.界面, k, '界面')
@@ -180,6 +196,26 @@ function table(head, rows) {
   const lines = [`| ${head.map(cell).join(' | ')} |`, `| ${head.map(() => '---').join(' | ')} |`]
   for (const r of rows) lines.push(`| ${r.map(cell).join(' | ')} |`)
   return lines.join('\n')
+}
+
+//-------------------------------------------------------------------------------------------------------------------
+// 函数简介  生成产品选型表（表头中英文两行，表格可横向滚动）
+// 参数说明  head 表头数组 [{ 中文, 英文 }]；rows 二维数组
+// 返回参数  选型表 HTML 文本
+// 使用示例  selectionTable([{ 中文: '型号', 英文: 'Device' }], [['A1']])
+// 备注信息  用 HTML 而非 Markdown 表格，以便表头换行显示中英文；样式见 custom.css 第 12 段
+//-------------------------------------------------------------------------------------------------------------------
+function selectionTable(head, rows) {
+  const th = head
+    .map((h) => {
+      const en = String(h.英文).trim()
+      return `<th><div class="th-cn">${html(h.中文)}</div>${en ? `<div class="th-en">${html(en)}</div>` : ''}</th>`
+    })
+    .join('')
+  const body = rows
+    .map((r) => `<tr>${r.map((v) => `<td>${html(v ?? '')}</td>`).join('')}</tr>`)
+    .join('\n')
+  return `<div class="selection-table">\n<table>\n<thead><tr>${th}</tr></thead>\n<tbody>\n${body}\n</tbody>\n</table>\n</div>`
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -273,11 +309,14 @@ export function generatePages(t) {
         { theme: 'alt', text: String(t.首页.按钮二), link: '/code/' }
       ]
     },
-    features: t.首页.卡片.map((c, i) => ({
-      title: String(c.标题),
-      details: String(c.说明),
-      link: [firstDoc, '/code/', '/changelog/'][i]
-    }))
+    // 三张卡片依次对应：文档中心、代码下载、更新日志；更新日志不发布时去掉第三张
+    features: t.首页.卡片
+      .map((c, i) => ({
+        title: String(c.标题),
+        details: String(c.说明),
+        link: [firstDoc, '/code/', '/changelog/'][i]
+      }))
+      .filter((c) => t.更新日志.已发布 || c.link !== '/changelog/')
   }
   writePage('index.md', `---\n${YAML.stringify(home)}---`)
 
@@ -295,7 +334,13 @@ export function generatePages(t) {
   const sp = t.产品系列页
   for (const s of series) {
     const buttons = sp.按钮
-      .map((b, i) => `  <a class="series-btn${i === 0 ? ' primary' : ''}" href="${html(b.链接)}">${html(b.文字)}</a>`)
+      .map((b, i) => {
+        // 指向样片申请页的按钮自动带上当前系列名称
+        const href = String(b.链接).startsWith('/sample/')
+          ? `/sample/?series=${encodeURIComponent(s.名称)}`
+          : b.链接
+        return `  <a class="series-btn${i === 0 ? ' primary' : ''}" href="${html(href)}">${html(b.文字)}</a>`
+      })
       .concat(`  <a class="series-btn" href="/products/">${html(sp.返回按钮)}</a>`)
     const resources = sp.资料分组.map((g) => {
       ensureDownloadDir(`${s.目录}/${g.文件夹}`)
@@ -306,7 +351,7 @@ export function generatePages(t) {
       banner(s.名称, s.简介, [nav.首页, nav.产品中心, s.名称]),
       `<div class="series-actions">\n${buttons.join('\n')}\n</div>`,
       `## ${sp.选型标题}`,
-      table(s.选型表.表头, s.选型表.数据),
+      selectionTable(sp.选型表头, s.选型表.数据),
       `## ${sp.资料标题}`,
       ...resources
     ].join('\n\n'))
@@ -331,7 +376,18 @@ export function generatePages(t) {
     return `::: details ${String(g.名称).replace(/\r?\n/g, ' ')}\n<DownloadList dir="code/${g.文件夹}" />\n:::`
   })
   writePage('code/index.md', [`# ${t.代码下载.标题}`, intro, ...codeGroups].filter(Boolean).join('\n\n'))
-  writePage('changelog/index.md', `# ${t.更新日志.标题}\n\n${t.更新日志.正文}`)
+
+  // 样片申请页（表单由 SampleForm.vue 渲染，提交到 functions/api/sample.js）
+  writePage('sample/index.md', [
+    '---\noutline: false\nsearch: false\n---',
+    banner(t.样片申请.标题, '', [nav.首页, nav.产品中心, t.样片申请.标题]),
+    '<SampleForm />'
+  ].join('\n\n'))
+  if (t.更新日志.已发布) {
+    writePage('changelog/index.md', `# ${t.更新日志.标题}\n\n${t.更新日志.正文}`)
+  } else {
+    fs.rmSync(path.join(ROOT, 'changelog'), { recursive: true, force: true })
+  }
 
   return firstDoc
 }

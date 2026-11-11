@@ -2,6 +2,8 @@ import { h } from 'vue'
 import DefaultTheme from 'vitepress/theme'
 import DownloadList from './DownloadList.vue'
 import FeaturesTitle from './FeaturesTitle.vue'
+import SampleForm from './SampleForm.vue'
+import ContactUs from './ContactUs.vue'
 import './custom.css'
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -10,16 +12,18 @@ import './custom.css'
 // 返回参数  主题对象
 // 使用示例  VitePress 自动加载 .vitepress/theme/index.mjs；页面中写 <DownloadList dir="code" />
 // 备注信息  样式在 custom.css；下载列表数据来自 downloads.data.mjs（扫描 public/downloads）；
-//           首页卡片区标题通过 home-features-before 插槽插入
+//           首页卡片区标题通过 home-features-before 插槽插入，「联系我们」通过 home-features-after 插入
 //-------------------------------------------------------------------------------------------------------------------
 export default {
   extends: DefaultTheme,
   Layout() {
     return h(DefaultTheme.Layout, null, {
-      'home-features-before': () => h(FeaturesTitle)
+      'home-features-before': () => h(FeaturesTitle),
+      'home-features-after': () => h(ContactUs)
     })
   },
   enhanceApp({ app }) {
     app.component('DownloadList', DownloadList)
+    app.component('SampleForm', SampleForm)
   }
 }
