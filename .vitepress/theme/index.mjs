@@ -4,6 +4,12 @@ import DownloadList from './DownloadList.vue'
 import FeaturesTitle from './FeaturesTitle.vue'
 import SampleForm from './SampleForm.vue'
 import ContactUs from './ContactUs.vue'
+import SelectionTable from './SelectionTable.vue'
+import ResourceGroups from './ResourceGroups.vue'
+import AllDownloads from './AllDownloads.vue'
+import HomeSeries from './HomeSeries.vue'
+import LatestDownloads from './LatestDownloads.vue'
+import HeroBackground from './HeroBackground.vue'
 import './custom.css'
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -18,12 +24,17 @@ export default {
   extends: DefaultTheme,
   Layout() {
     return h(DefaultTheme.Layout, null, {
-      'home-features-before': () => h(FeaturesTitle),
-      'home-features-after': () => h(ContactUs)
+      // 首页顺序：背景轮播 + 横幅 → 产品系列卡片 → 服务导航（标题 + 卡片）→ 最新资料 → 联系我们
+      'home-hero-before': () => h(HeroBackground),
+      'home-features-before': () => [h(HomeSeries), h(FeaturesTitle)],
+      'home-features-after': () => [h(LatestDownloads), h(ContactUs)]
     })
   },
   enhanceApp({ app }) {
     app.component('DownloadList', DownloadList)
     app.component('SampleForm', SampleForm)
+    app.component('SelectionTable', SelectionTable)
+    app.component('ResourceGroups', ResourceGroups)
+    app.component('AllDownloads', AllDownloads)
   }
 }

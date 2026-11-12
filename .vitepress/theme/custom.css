@@ -154,13 +154,82 @@
 .VPHome {
   padding-bottom: 0 !important;
 }
+/* 背景图轮播：bg-1（MCU 与电机）→ bg-2（电机剖面）→ bg-3（芯片与电路），每张停留约 6 秒，1.5 秒交叉淡入淡出；
+   图片位于 public/，由 HeroBackground.vue 叠放在横幅后面；::after 为左侧遮罩，保证白字可读 */
+.VPHome {
+  position: relative;
+}
+.hero-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 100vh;
+  height: 100svh;
+  overflow: hidden;
+  z-index: 0;
+  pointer-events: none;
+  background: var(--brand-navy-dark);
+}
+.hero-bg-img {
+  position: absolute;
+  inset: 0;
+  background: center / cover no-repeat;
+  opacity: 0;
+  animation: hero-bg-fade 21s infinite;
+}
+/* 延迟整体提前 1.5 秒：打开页面时第一张已完全显示，不会先出现黑屏 */
+.hero-bg-img:nth-child(1) { animation-delay: -1.5s; }
+.hero-bg-img:nth-child(2) { animation-delay: 5.5s; }
+.hero-bg-img:nth-child(3) { animation-delay: 12.5s; }
+/* 21 秒一轮：每张 0~7%（1.5 秒）淡入，保持到 33%，到 40% 淡出 */
+@keyframes hero-bg-fade {
+  0% { opacity: 0; }
+  7% { opacity: 1; }
+  33% { opacity: 1; }
+  40% { opacity: 0; }
+  100% { opacity: 0; }
+}
 .VPHero {
+  position: relative;
+  z-index: 1;
   margin-top: calc(var(--vp-nav-height) * -1) !important;
   padding: calc(var(--vp-nav-height) + 96px) 24px 104px !important;
-  background:
-    linear-gradient(90deg, rgba(var(--brand-dark-rgb), 0.5) 0%, rgba(var(--brand-dark-rgb), 0.2) 45%, rgba(var(--brand-dark-rgb), 0) 100%),
-    url('/hero-bg.jpg') center / cover no-repeat,
-    var(--brand-navy-dark);
+  background: none;
+}
+.VPHero::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background: linear-gradient(90deg, rgba(var(--brand-dark-rgb), 0.6) 0%, rgba(var(--brand-dark-rgb), 0.3) 45%, rgba(var(--brand-dark-rgb), 0) 100%);
+}
+/* 横幅之后的内容盖在背景图上方 */
+.VPHome > :not(.hero-bg):not(.VPHero) {
+  position: relative;
+  z-index: 1;
+}
+/* 系统设置了「减少动态效果」时不轮播，固定显示第一张 */
+@media (prefers-reduced-motion: reduce) {
+  .hero-bg-img {
+    animation: none;
+  }
+  .hero-bg-img:first-child {
+    opacity: 1;
+  }
+}
+/* 首屏全屏：横幅高度铺满浏览器窗口（含透明导航栏），文字与按钮垂直居中 */
+.VPHero {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-height: 100vh;
+  min-height: 100svh;
+}
+.VPHero > .container {
+  width: 100%;
 }
 /* 遮罩变淡后，给横幅文字加阴影保证可读 */
 .VPHero .name,
@@ -515,6 +584,126 @@
   text-decoration: underline;
 }
 
+/* ---------- 11.1 首页产品系列卡片、最新资料（HomeSeries.vue、LatestDownloads.vue） ---------- */
+.home-sec-title {
+  margin: 0 0 40px;
+  text-align: center;
+  font-size: 30px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+.home-series {
+  padding: 72px 24px 8px;
+}
+.home-series-list {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 24px;
+  max-width: 1152px;
+  margin: 0 auto;
+}
+.home-series-card {
+  display: flex;
+  flex-direction: column;
+  padding: 28px 24px 22px;
+  border: 1px solid var(--vp-c-divider);
+  border-top: 3px solid var(--vp-c-text-1);
+  border-radius: 4px;
+  background: var(--vp-c-bg);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.06);
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  transition: transform 0.25s, box-shadow 0.25s;
+}
+.home-series-card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.12);
+}
+.hs-name {
+  font-size: 20px;
+  font-weight: 700;
+}
+.hs-params {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 18px 0 14px;
+  padding: 12px 0;
+  border-top: 1px solid var(--vp-c-divider);
+  border-bottom: 1px solid var(--vp-c-divider);
+  text-align: center;
+}
+.hs-v {
+  font-size: 18px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+.hs-n {
+  margin-top: 2px;
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+}
+.hs-intro {
+  flex: 1;
+  margin: 0 0 16px;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--vp-c-text-2);
+}
+.hs-more {
+  font-size: 14px;
+  font-weight: 600;
+}
+.home-latest {
+  padding: 8px 24px 24px;
+}
+.home-latest-list {
+  max-width: 1152px;
+  margin: 0 auto;
+  padding: 0;
+  list-style: none;
+  border-top: 1px solid var(--vp-c-divider);
+}
+.home-latest-list li {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 6px 16px;
+  padding: 14px 4px;
+  border-bottom: 1px solid var(--vp-c-divider);
+}
+.home-latest-list .hl-name {
+  flex: 1 1 320px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+}
+.home-latest-list .hl-name:hover {
+  text-decoration: underline;
+}
+.home-latest-list .hl-tag {
+  padding: 0 8px;
+  border-radius: 3px;
+  background: var(--vp-c-bg-soft);
+  font-size: 12px;
+  color: var(--vp-c-text-2);
+}
+.home-latest-list .hl-meta {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+  white-space: nowrap;
+}
+.home-latest-more {
+  max-width: 1152px;
+  margin: 16px auto 0;
+  text-align: right;
+}
+.home-latest-more a {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
 /* ---------- 12. 产品选型表：18 列，横向滚动；表头中文在上、英文在下；首列固定 ---------- */
 .vp-doc .selection-table {
   margin: 16px 0;
@@ -570,6 +759,82 @@
 }
 .vp-doc .download-list .dl-desc {
   min-width: 160px;
+}
+
+/* ---------- 13.1 系列页关键参数卡片、典型应用 ---------- */
+.key-params {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  gap: 12px;
+  margin: 8px 0 16px;
+}
+.key-params .kp {
+  padding: 14px 12px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 6px;
+  background: var(--vp-c-bg-soft);
+  text-align: center;
+}
+.key-params .kp-v {
+  font-size: 20px;
+  font-weight: 700;
+  line-height: 1.3;
+  color: var(--vp-c-text-1);
+}
+.key-params .kp-n {
+  margin-top: 4px;
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+.vp-doc .series-apps {
+  margin: 0 0 8px;
+  font-size: 14px;
+}
+
+/* ---------- 13.2 选型表筛选与排序、资料汇总页筛选栏 ---------- */
+.sel-tools,
+.all-dl-tools {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 10px;
+  margin: 12px 0;
+}
+.sel-filter,
+.all-dl-tools input,
+.all-dl-tools select {
+  padding: 6px 10px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-size: 14px;
+}
+.sel-filter,
+.all-dl-tools input {
+  flex: 0 1 320px;
+  min-width: 180px;
+}
+.sel-count {
+  font-size: 13px;
+  color: var(--vp-c-text-2);
+}
+.vp-doc .selection-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+.vp-doc .selection-table th.sortable:hover {
+  background: var(--vp-c-default-soft) !important;
+}
+.vp-doc .selection-table .sel-empty {
+  text-align: center;
+  color: var(--vp-c-text-2);
+}
+
+/* ---------- 13.3 资料分组数量 ---------- */
+.res-count {
+  font-weight: 400;
+  color: var(--vp-c-text-2);
 }
 
 /* ---------- 14. 产品中心与产品系列页：内容区加宽、左侧栏收窄 ----------
@@ -632,6 +897,38 @@
   .doc-page .VPSidebar {
     padding-left: 20px;
   }
+}
+
+/* ---------- 15.1 开发支持首页：文章卡片 ---------- */
+.support-cards {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 16px;
+  margin: 16px 0 8px;
+}
+.vp-doc a.support-card {
+  display: block;
+  padding: 18px 20px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 4px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  text-decoration: none;
+  transition: box-shadow 0.2s, transform 0.2s;
+}
+.vp-doc a.support-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+}
+.support-card .sc-title {
+  font-size: 16px;
+  font-weight: 600;
+}
+.support-card .sc-desc {
+  margin-top: 6px;
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--vp-c-text-2);
 }
 
 /* ---------- 16. 搜索框与搜索弹窗：字体与标题一致（微软雅黑） ----------

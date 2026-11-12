@@ -80,17 +80,21 @@ export function loadText() {
 
   // 必填文字字段
   for (const k of ['名称', '描述', '页脚说明', '页脚版权', '页脚免责']) req(t.站点, k, '站点')
-  for (const k of ['首页', '产品中心', '文档中心', '代码下载', '更新日志']) req(t.导航, k, '导航')
-  for (const k of ['标题', '副标题', '按钮一', '按钮二', '卡片区标题']) req(t.首页, k, '首页')
-  const cards = list(t.首页, '卡片', '首页')
-  if (cards.length !== 3) fail('首页 卡片', `应为 3 张（依次对应产品中心、代码下载、更新日志），当前 ${cards.length} 张`)
-  cards.forEach((c, i) => { req(c, '标题', `首页 卡片 第 ${i + 1} 张`); req(c, '说明', `首页 卡片 第 ${i + 1} 张`) })
+  for (const k of ['首页', '产品中心', '代码下载', '资料下载', '开发支持', '更新日志']) req(t.导航, k, '导航')
+  for (const k of ['标题', '副标题', '系列区标题', '系列区按钮', '卡片区标题', '最新资料标题', '查看全部']) req(t.首页, k, '首页')
+  if (!/^\d+$/.test(req(t.首页, '最新资料数量', '首页'))) fail('首页', '「最新资料数量」应为整数，0 表示不显示')
+  const heroBtns = list(t.首页, '按钮', '首页')
+  if (!heroBtns.length) fail('首页 按钮', '至少需要 1 个')
+  heroBtns.forEach((b, i) => { req(b, '文字', `首页 按钮 第 ${i + 1} 个`); req(b, '链接', `首页 按钮 第 ${i + 1} 个`) })
+  list(t.首页, '卡片', '首页').forEach((c, i) => {
+    for (const k of ['标题', '说明', '链接']) req(c, k, `首页 卡片 第 ${i + 1} 张`)
+  })
   for (const k of ['标题', '地址', '电话', '邮箱', '地址标签', '电话标签', '邮箱标签']) req(t.首页.联系我们, k, '首页 联系我们')
   for (const k of ['横幅标题', '横幅说明', '列表标题']) req(t.产品中心, k, '产品中心')
   if (list(t.产品中心, '列表表头', '产品中心').length !== 2) fail('产品中心 列表表头', '应为 2 项，如 [系列, 简介]')
 
   const sp = t.产品系列页
-  for (const k of ['返回按钮', '选型标题', '资料标题']) req(sp, k, '产品系列页')
+  for (const k of ['返回按钮', '选型标题', '资料标题', '应用标题', '筛选提示', '无匹配']) req(sp, k, '产品系列页')
   list(sp, '按钮', '产品系列页').forEach((b, i) => { req(b, '文字', `产品系列页 按钮 第 ${i + 1} 个`); req(b, '链接', `产品系列页 按钮 第 ${i + 1} 个`) })
   const folderSeen = new Set()
   list(sp, '资料分组', '产品系列页').forEach((g, i) => {
@@ -111,6 +115,11 @@ export function loadText() {
     req(s, '名称', where)
     req(s, '简介', where)
     checkSlug(req(s, '目录', where), seriesSeen, where, '目录')
+    // 关键参数（横幅下方的参数卡片）、典型应用：均可不写
+    if (s.关键参数 !== undefined) {
+      list(s, '关键参数', where).forEach((k, j) => { req(k, '名称', `${where} 关键参数 第 ${j + 1} 项`); req(k, '值', `${where} 关键参数 第 ${j + 1} 项`) })
+    }
+    if (s.典型应用 !== undefined && s.典型应用 !== null && typeof s.典型应用 === 'object') fail(where, '「典型应用」应为一行文字')
     if (!s.选型表 || typeof s.选型表 !== 'object') fail(where, '缺少「选型表」')
     if (s.选型表.表头 !== undefined) fail(`${s.名称} 选型表`, '表头已统一移到「产品系列页 → 选型表头」，请删除这里的「表头」')
     list(s.选型表, '数据', `${s.名称} 选型表`).forEach((row, r) => {
@@ -119,27 +128,32 @@ export function loadText() {
     })
   })
 
-  const docSeen = new Set()
-  const groups = list(t.文档中心, '分组', '文档中心')
-  if (!groups.length) fail('文档中心 分组', '至少需要 1 个分组')
-  groups.forEach((g, i) => {
-    const where = `文档中心 分组 第 ${i + 1} 项`
+  // 开发支持：文章正文写在 support/<文件>.md（独立 Markdown 文件），这里只登记分组、标题和发布状态
+  for (const k of ['横幅标题', '横幅说明']) req(t.开发支持, k, '开发支持')
+  const supSeen = new Set()
+  const supGroups = list(t.开发支持, '分组', '开发支持')
+  supGroups.forEach((g, i) => {
+    const where = `开发支持 分组 第 ${i + 1} 项`
     req(g, '标题', where)
-    const pages = list(g, '页面', where)
-    if (!pages.length) fail(where, '「页面」至少需要 1 篇')
-    pages.forEach((p, j) => {
-      const pw = `${where} 页面 第 ${j + 1} 篇`
+    list(g, '文章', where).forEach((p, j) => {
+      const pw = `${where} 文章 第 ${j + 1} 篇`
       req(p, '标题', pw)
-      req(p, '正文', pw)
-      checkSlug(req(p, '文件', pw), docSeen, pw, '文件')
+      req(p, '说明', pw)
+      const f = req(p, '文件', pw)
+      if (f === 'index') fail(pw, '「文件」不能用 index（已用于开发支持首页）')
+      checkSlug(f, supSeen, pw, '文件')
       if (p.发布 !== undefined && !['是', '否', true, false].includes(p.发布)) fail(pw, '「发布」只能写 是 或 否')
+      const published = p.发布 !== '否' && p.发布 !== false
+      if (published && !fs.existsSync(path.join(ROOT, 'support', `${f}.md`))) fail(pw, `找不到正文文件 support/${f}.md`)
     })
   })
-  // 去掉「发布: 否」的文档；某分组的文档全部不发布时，整个分组不显示
-  t.文档中心.分组 = groups
-    .map((g) => ({ ...g, 页面: g.页面.filter((p) => p.发布 !== '否' && p.发布 !== false) }))
-    .filter((g) => g.页面.length)
-  if (!t.文档中心.分组.length) fail('文档中心', '至少需要 1 篇「发布: 是」的文档（导航和首页按钮会链接到第一篇）')
+  // 「发布: 否」的文章不参与构建（config.mjs 的 srcExclude 使用）
+  t.开发支持.未发布 = supGroups.flatMap((g) => g.文章.filter((p) => p.发布 === '否' || p.发布 === false).map((p) => `support/${p.文件}.md`))
+  // 去掉「发布: 否」的文章；某分组全部不发布时整组不显示；一篇都没有时导航不显示「开发支持」
+  t.开发支持.分组 = supGroups
+    .map((g) => ({ ...g, 文章: g.文章.filter((p) => p.发布 !== '否' && p.发布 !== false) }))
+    .filter((g) => g.文章.length)
+  t.开发支持.已发布 = t.开发支持.分组.length > 0
 
   req(t.代码下载, '标题', '代码下载')
   req(t.代码下载, '说明', '代码下载')
@@ -152,6 +166,7 @@ export function loadText() {
     checkSlug(req(g, '文件夹', where), codeSeen, where, '文件夹')
   })
   for (const k of ['文件名', '说明', '版本', '更新日期', '大小', '下载', '无文件']) req(t.下载列表, k, '下载列表')
+  for (const k of ['标题', '说明', '全部系列', '全部类型', '搜索提示', '系列', '类型', '无匹配']) req(t.资料下载, k, '资料下载')
   for (const k of ['标题', '说明', '产品', '公司名称', '联系人', '联系电话', '联系邮箱', '申请说明', '申请说明提示',
     '提交按钮', '提交中', '成功', '失败', '必填提示', '邮箱格式错误', '返回上一页']) req(t.样片申请, k, '样片申请')
   for (const k of ['标题', '正文']) req(t.更新日志, k, '更新日志')
@@ -196,26 +211,6 @@ function table(head, rows) {
   const lines = [`| ${head.map(cell).join(' | ')} |`, `| ${head.map(() => '---').join(' | ')} |`]
   for (const r of rows) lines.push(`| ${r.map(cell).join(' | ')} |`)
   return lines.join('\n')
-}
-
-//-------------------------------------------------------------------------------------------------------------------
-// 函数简介  生成产品选型表（表头中英文两行，表格可横向滚动）
-// 参数说明  head 表头数组 [{ 中文, 英文 }]；rows 二维数组
-// 返回参数  选型表 HTML 文本
-// 使用示例  selectionTable([{ 中文: '型号', 英文: 'Device' }], [['A1']])
-// 备注信息  用 HTML 而非 Markdown 表格，以便表头换行显示中英文；样式见 custom.css 第 12 段
-//-------------------------------------------------------------------------------------------------------------------
-function selectionTable(head, rows) {
-  const th = head
-    .map((h) => {
-      const en = String(h.英文).trim()
-      return `<th><div class="th-cn">${html(h.中文)}</div>${en ? `<div class="th-en">${html(en)}</div>` : ''}</th>`
-    })
-    .join('')
-  const body = rows
-    .map((r) => `<tr>${r.map((v) => `<td>${html(v ?? '')}</td>`).join('')}</tr>`)
-    .join('\n')
-  return `<div class="selection-table">\n<table>\n<thead><tr>${th}</tr></thead>\n<tbody>\n${body}\n</tbody>\n</table>\n</div>`
 }
 
 //-------------------------------------------------------------------------------------------------------------------
@@ -288,15 +283,13 @@ function ensureDownloadDir(rel) {
 //-------------------------------------------------------------------------------------------------------------------
 // 函数简介  根据文字总表生成全部页面文件
 // 参数说明  t loadText() 的返回值
-// 返回参数  文档中心第一篇文档的网址（供导航和首页按钮使用）
-// 使用示例  const firstDoc = generatePages(loadText())
-// 备注信息  生成 index.md、products/*.md、docs/*.md、code/index.md、changelog/index.md；
-//           删除总表中已移除的系列和文档页面；为新系列创建下载文件夹
+// 返回参数  无
+// 使用示例  generatePages(loadText())
+// 备注信息  生成 index.md、products/*.md、code/index.md、resources/index.md、support/index.md、changelog/index.md；
+//           删除总表中已移除的系列页面；创建共用的设计资源下载文件夹；support/ 下的文章由人工编写，不会被改动
 //-------------------------------------------------------------------------------------------------------------------
 export function generatePages(t) {
   const nav = t.导航
-  const groups = t.文档中心.分组
-  const firstDoc = `/docs/${groups[0].页面[0].文件}`
 
   // 首页（frontmatter 用 YAML 库生成，避免引号、冒号等字符出错）
   const home = {
@@ -304,19 +297,12 @@ export function generatePages(t) {
     hero: {
       name: String(t.首页.标题),
       tagline: String(t.首页.副标题),
-      actions: [
-        { theme: 'brand', text: String(t.首页.按钮一), link: '/products/' },
-        { theme: 'alt', text: String(t.首页.按钮二), link: '/code/' }
-      ]
+      actions: t.首页.按钮.map((b, i) => ({ theme: i === 0 ? 'brand' : 'alt', text: String(b.文字), link: String(b.链接) }))
     },
-    // 三张卡片依次对应：产品中心、代码下载、更新日志；更新日志不发布时去掉第三张
+    // 服务导航卡片；指向更新日志且更新日志不发布时去掉
     features: t.首页.卡片
-      .map((c, i) => ({
-        title: String(c.标题),
-        details: String(c.说明),
-        link: ['/products/', '/code/', '/changelog/'][i]
-      }))
-      .filter((c) => t.更新日志.已发布 || c.link !== '/changelog/')
+      .map((c) => ({ title: String(c.标题), details: String(c.说明), link: String(c.链接) }))
+      .filter((c) => t.更新日志.已发布 || !c.link.startsWith('/changelog'))
   }
   writePage('index.md', `---\n${YAML.stringify(home)}---`)
 
@@ -342,41 +328,59 @@ export function generatePages(t) {
         return `  <a class="series-btn${i === 0 ? ' primary' : ''}" href="${html(href)}">${html(b.文字)}</a>`
       })
       .concat(`  <a class="series-btn" href="/products/">${html(sp.返回按钮)}</a>`)
-    const resources = sp.资料分组.map((g) => {
-      ensureDownloadDir(`${s.目录}/${g.文件夹}`)
-      return `::: details ${String(g.名称).replace(/\r?\n/g, ' ')}\n<DownloadList dir="${s.目录}/${g.文件夹}" />\n:::`
-    })
+    // 关键参数卡片与典型应用（同类网站系列页首屏的常见做法）；未填写则不显示
+    const params = (s.关键参数 || []).map((k) =>
+      `  <div class="kp"><div class="kp-v">${html(k.值)}</div><div class="kp-n">${html(k.名称)}</div></div>`)
+    const apps = String(s.典型应用 ?? '').trim()
     writePage(`products/${s.目录}.md`, [
       '---\noutline: false\npageClass: product-page\n---',
       banner(s.名称, s.简介, [nav.首页, nav.产品中心, s.名称]),
       `<div class="series-actions">\n${buttons.join('\n')}\n</div>`,
+      params.length ? `<div class="key-params">\n${params.join('\n')}\n</div>` : '',
+      apps ? `<p class="series-apps"><strong>${html(sp.应用标题)}：</strong>${html(apps)}</p>` : '',
       `## ${sp.选型标题}`,
-      selectionTable(sp.选型表头, s.选型表.数据),
+      `<SelectionTable series="${s.目录}" />`,
       `## ${sp.资料标题}`,
-      ...resources
-    ].join('\n\n'))
+      `<ResourceGroups base="series" kind="series" />`
+    ].filter(Boolean).join('\n\n'))
   }
   removeStale('products', new Set(['index.md', ...series.map((s) => `${s.目录}.md`)]))
+  // 设计资源：三个系列共用 public/downloads/series/<资料分组文件夹>/，各系列页显示相同内容
+  for (const g of sp.资料分组) ensureDownloadDir(`series/${g.文件夹}`)
 
-  // 文档中心
-  const docFiles = []
-  for (const g of groups) {
-    for (const p of g.页面) {
-      // pageClass: doc-page 用于收窄左侧栏（与产品中心同宽），样式见 custom.css 第 15 段
-      writePage(`docs/${p.文件}.md`, `---\npageClass: doc-page\n---\n\n# ${p.标题}\n\n${p.正文}`)
-      docFiles.push(`${p.文件}.md`)
-    }
+  // 旧版「文档中心」生成的 docs/ 目录已停用，构建时清除
+  fs.rmSync(path.join(ROOT, 'docs'), { recursive: true, force: true })
+
+  // 开发支持首页：按分组列出文章卡片（文章本身是 support/<文件>.md，人工编写）
+  const supportFile = path.join(ROOT, 'support', 'index.md')
+  if (t.开发支持.已发布) {
+    const cards = t.开发支持.分组.map((g) => [
+      `## ${g.标题}`,
+      '<div class="support-cards">',
+      ...g.文章.map((p) => `  <a class="support-card" href="/support/${p.文件}"><div class="sc-title">${html(p.标题)}</div><div class="sc-desc">${html(p.说明)}</div></a>`),
+      '</div>'
+    ].join('\n'))
+    writePage('support/index.md', [
+      '---\noutline: false\npageClass: doc-page\n---',
+      banner(t.开发支持.横幅标题, t.开发支持.横幅说明, [nav.首页, nav.开发支持]),
+      ...cards
+    ].join('\n\n'))
+  } else if (fs.existsSync(supportFile)) {
+    fs.rmSync(supportFile)
   }
-  removeStale('docs', new Set(docFiles))
 
   // 代码下载、更新日志
   ensureDownloadDir('code')
   const intro = String(t.代码下载.说明).trim()
-  const codeGroups = t.代码下载.分组.map((g) => {
-    ensureDownloadDir(`code/${g.文件夹}`)
-    return `::: details ${String(g.名称).replace(/\r?\n/g, ' ')}\n<DownloadList dir="code/${g.文件夹}" />\n:::`
-  })
-  writePage('code/index.md', [`# ${t.代码下载.标题}`, intro, ...codeGroups].filter(Boolean).join('\n\n'))
+  for (const g of t.代码下载.分组) ensureDownloadDir(`code/${g.文件夹}`)
+  writePage('code/index.md', [`# ${t.代码下载.标题}`, intro, '<ResourceGroups base="code" kind="code" />'].filter(Boolean).join('\n\n'))
+
+  // 资料下载汇总页（全部系列、全部类型的文件，可筛选、搜索；由 AllDownloads.vue 渲染）
+  writePage('resources/index.md', [
+    '---\noutline: false\npageClass: product-page\n---',
+    banner(t.资料下载.标题, t.资料下载.说明, [nav.首页, nav.资料下载]),
+    '<AllDownloads />'
+  ].join('\n\n'))
 
   // 样片申请页（表单由 SampleForm.vue 渲染，提交到 functions/api/sample.js）
   writePage('sample/index.md', [
@@ -390,5 +394,4 @@ export function generatePages(t) {
     fs.rmSync(path.join(ROOT, 'changelog'), { recursive: true, force: true })
   }
 
-  return firstDoc
 }
